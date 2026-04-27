@@ -52,7 +52,6 @@
 
 <navbar class="topbar">
     <a href="{{ route('/') }}" class="topbar-logo" style="margin-left: 3em">
-        {{-- <div class="logo-orb">NL</div> --}}
         <text class="logo-name"><span style="color: #01f5fd">Nex</span><span style="color: #fc4949">Logic</span></text>
     </a>
 
@@ -93,7 +92,6 @@
         @else
             <div style="display: flex; align-items: center; gap: 12px;">
                 <a href="{{ route('login') }}" class="btn-login">Log in</a>
-                <a href="{{ route('register') }}" class="btn-register">Sign Up</a>
             </div>
         @endauth
     </div>

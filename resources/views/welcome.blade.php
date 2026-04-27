@@ -193,7 +193,7 @@
                         📚 &nbsp;Lihat Materi
                     </a>
                 @else
-                    <a href="{{ route('register') }}" class="btn-primary" style="margin-left: 7em; display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
+                    <a href="{{ route('login') }}" class="btn-primary" style="margin-left: 7em; display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
                         🎮 &nbsp;Mulai Belajar
                     </a>
                 @endauth
@@ -299,7 +299,7 @@
                 🚀 &nbsp;Mulai Gratis Sekarang
             </a>
         @else
-            <a href="{{ route('register') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
+            <a href="{{ route('login') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
                 🚀 &nbsp;Mulai Gratis Sekarang
             </a>
         @endauth
