@@ -12,7 +12,9 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                'heading': ['Orbitron', 'sans-serif'],
+                'body': ['"Plus Jakarta Sans"', 'sans-serif'],
+                'soal': ['"JetBrains Mono"', 'monospace'],
             },
         },
     },
