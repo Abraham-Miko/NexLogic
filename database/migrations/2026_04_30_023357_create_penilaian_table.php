@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('siswa_id')->constrained('users');
             $table->foreignId('sub_wilayah_id')->constrained('sub_wilayah');
             $table->integer('materi_ke');
-            $table->integer('skor_pre');
-            $table->integer('skor_post');
-            $table->integer('skor_puzzle');
+            $table->integer('skor_pre')->nullable();
+            $table->integer('skor_post')->nullable();
+            $table->integer('skor_puzzle')->nullable();
             $table->timestamps();
         });
     }
