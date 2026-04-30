@@ -6,7 +6,7 @@
         {{-- Tombol Toggle Sidebar (Expand/Collapse) --}}
         <div class="sidebar-toggle-wrapper">
             <button class="sidebar-toggle-btn" @click="sidebarOpen = !sidebarOpen" :title="sidebarOpen ? 'Kecilkan Sidebar' : 'Perluas Sidebar'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" 
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"
                      class="transition-transform duration-300" :class="{ 'rotate-180': !sidebarOpen }">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                 </svg>
@@ -26,7 +26,7 @@
                 <span class="nav-label">Dashboard</span>
             </a>
             <hr style="opacity: 0.1; margin: 8px 0;">
-            <a href="" class="nav-item {{ request()->routeIs('materi*') ? 'active' : '' }}" title="Materi">
+            <a href="{{ route('materi.index') }}" class="nav-item {{ request()->routeIs('materi.index') ? 'active' : '' }}" title="Materi">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                 </svg>
