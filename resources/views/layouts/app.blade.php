@@ -10,7 +10,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <style>
             :root {
-                --sidebar-width-expanded: 72px; /* Dikecilkan untuk mode ikon-saja */
+                --sidebar-width-collapsed: 72px; /* Lebar saat ikon-saja */
+                --sidebar-width-expanded: 255px; /* Lebar saat teks muncul */
                 --bg-deep: #080e1a;
                 --bg-card: #0f172a;
                 --sidebar-bg: #0a1020;
@@ -111,24 +112,6 @@
                 background: rgba(124, 58, 237, 0.08);
             }
 
-            .user-dropdown-btn {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 6px 14px;
-                border-radius: 8px;
-                background: rgba(124, 58, 237, 0.08);
-                border: 1px solid var(--border);
-                color: var(--text-dim);
-                font-size: 0.85rem;
-                cursor: pointer;
-                transition: all 0.2s;
-            }
-            .user-dropdown-btn:hover {
-                color: #fff;
-                border-color: rgba(167, 139, 250, 0.4);
-            }
-
             /* ── Content Wrapper ── */
             .content-wrapper {
                 display: flex;
@@ -138,10 +121,10 @@
 
             /* ── Sidebar ── */
             .sidebar {
-                width: 0;
+                width: var(--sidebar-width-collapsed);
                 background: var(--sidebar-bg);
-                border-right: 0px solid transparent;
-                transition: width var(--transition), border-color var(--transition);
+                border-right: 1px solid var(--border);
+                transition: width var(--transition);
                 overflow: hidden;
                 flex-shrink: 0;
                 z-index: 50;
@@ -149,26 +132,31 @@
 
             .sidebar.expanded {
                 width: var(--sidebar-width-expanded);
-                border-right: 1px solid var(--border);
             }
 
             .sidebar-inner {
-                width: var(--sidebar-width-expanded);
+                width: 100%;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
-                align-items: center; /* Posisikan semua konten ke tengah */
                 padding: 16px 0;
             }
 
-            /* Tombol Tutup Sidebar */
-            .sidebar-close-btn {
-                align-self: center; /* Pindah ke tengah */
-                margin: 0 0 16px 0; /* Ubah jarak margin */
+            /* Tombol Toggle Sidebar */
+            .sidebar-toggle-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start; /* Mematok tombol di sebelah kiri */
+                width: 100%;
+                margin-bottom: 16px;
+                padding: 0 18px; /* 18px kiri + 36px tombol + 18px kanan = tepat di tengah saat ukuran 72px */
+            }
+
+            .sidebar-toggle-btn {
                 width: 36px;
                 height: 36px;
                 border-radius: 8px;
-                background: rgba(255, 255, 255, 0.05);
+                background: rgba(255, 255, 255, 0.03);
                 border: 1px solid var(--border);
                 color: var(--text-muted);
                 display: flex;
@@ -177,10 +165,10 @@
                 cursor: pointer;
                 transition: all 0.2s ease;
             }
-            .sidebar-close-btn:hover {
-                background: rgba(248, 113, 113, 0.15);
-                color: #fca5a5;
-                border-color: rgba(248, 113, 113, 0.3);
+            .sidebar-toggle-btn:hover {
+                background: rgba(124, 58, 237, 0.15);
+                color: var(--purple-light);
+                border-color: rgba(124, 58, 237, 0.3);
             }
 
             .nav-group {
@@ -195,13 +183,15 @@
                 width: 100%;
                 display: flex;
                 align-items: center;
-                justify-content: center; /* Logo dipindah ke tengah */
-                padding: 0; /* Hapus padding samping */
+                justify-content: flex-start;
+                padding: 0 25px; /* Menempatkan ikon 22px pas di tengah dari lebar 72px */
+                gap: 16px; /* Jarak ikon ke teks */
                 height: 48px;
                 color: var(--text-muted);
                 text-decoration: none;
                 transition: color 0.2s, background 0.2s;
                 position: relative;
+                white-space: nowrap;
             }
 
             .nav-item svg {
@@ -210,9 +200,21 @@
                 height: 22px;
             }
 
+            .nav-label {
+                font-weight: 500;
+                font-size: 0.95rem;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+
+            .sidebar.expanded .nav-label {
+                opacity: 1;
+                transition: opacity 0.4s ease 0.1s; /* Delay halus agar teks muncul setelah panel terbuka */
+            }
+
             .nav-item:hover {
                 color: #e2e8f0;
-                background: rgba(255,255,255,0.04);
+                background: rgba(255, 255, 255, 0.04);
             }
 
             .nav-item.active {
@@ -232,11 +234,6 @@
                 background: var(--purple);
             }
 
-            /* Teks disembunyikan secara permanen */
-            .nav-label {
-                display: none;
-            }
-
             .sidebar-footer {
                 margin-top: auto;
                 width: 100%;
@@ -253,37 +250,10 @@
             .page-slot::-webkit-scrollbar { width: 4px; }
             .page-slot::-webkit-scrollbar-track { background: transparent; }
             .page-slot::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-            /* ── Floating Open Button (Kiri Bawah) ── */
-            .floating-open-btn {
-                position: fixed;
-                bottom: 32px;
-                left: 32px;
-                width: 54px;
-                height: 54px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #7c3aed, #6d28d9);
-                color: #fff;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4), 0 0 0 1px rgba(167, 139, 250, 0.2);
-                cursor: pointer;
-                border: none;
-                z-index: 100;
-                transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
-            }
-            .floating-open-btn:hover {
-                transform: scale(1.08) translateY(-4px);
-                box-shadow: 0 12px 32px rgba(124, 58, 237, 0.6), 0 0 0 1px rgba(167, 139, 250, 0.4);
-            }
-            .floating-open-btn:active {
-                transform: scale(0.95);
-            }
         </style>
     </head>
     <body>
-        <div class="app-shell" x-data="{ sidebarOpen: true }">
+        <div class="app-shell" x-data="{ sidebarOpen: false }">
 
             {{-- ── Topbar ── --}}
             @include('layouts.top_navigation')
@@ -296,27 +266,20 @@
 
                 {{-- Page Content --}}
                 <main class="page-slot">
-                    {{ $slot }}
+                    {{ $slot }} 
                 </main>
 
             </div>
-
-            {{-- ── Floating Button Pembuka Sidebar (Pojok Kiri Bawah) ── --}}
-            <button x-show="!sidebarOpen"
-                    x-transition:enter="transition ease-out duration-300 transform"
-                    x-transition:enter-start="opacity-0 translate-y-8 scale-50"
-                    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                    x-transition:leave="transition ease-in duration-200 transform"
-                    x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                    x-transition:leave-end="opacity-0 translate-y-8 scale-50"
-                    class="floating-open-btn"
-                    @click="sidebarOpen = true"
-                    title="Buka Menu">
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"/>
-                </svg>
-            </button>
-
         </div>
     </body>
 </html>
+
+{{-- 
+    Catatan:
+    - Warna, ukuran, dan jarak pada CSS dapat disesuaikan dengan kebutuhan desain.
+    - Animasi pada sidebar menggunakan transisi CSS untuk efek yang lebih halus.
+    - Struktur HTML menggunakan Blade components untuk modularitas dan kemudahan pemeliharaan.
+    - Pastikan untuk menyesuaikan rute dan ikon sesuai dengan kebutuhan aplikasi Anda.
+    - Kode ini fokus pada layout dan navigasi, sehingga konten halaman akan ditempatkan di dalam slot {{ $slot }} pada bagian <main class="page-slot">.
+    - Untuk ikon, saya menggunakan SVG inline agar mudah dikustomisasi dan tidak bergantung pada library eksternal. Anda bisa menggantinya dengan ikon dari library seperti FontAwesome atau Heroicons jika diinginkan.
+--}}

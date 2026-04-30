@@ -247,18 +247,10 @@
                 {{-- Email --}}
                 <div class="form-group">
                     <label for="email" class="form-label">Email Address</label>
-                    <input id="email" type="email" name="email" value="{{ old('email') }}"
+                    <input id="email" type="email" name="email"
                         class="form-input @error('email') is-invalid @enderror"
                         placeholder="contoh@siswa.com" required autofocus autocomplete="username">
 
-                    @error('email')
-                        <span style="color: #f87171; font-size: 0.75rem; margin-top: 6px; display: block; font-weight: 500;">
-                            <svg xmlns="http://www.w3.org/2000/svg" style="display: inline; width: 14px; height: 14px; margin-right: 4px; vertical-align: middle;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {{ $message }}
-                        </span>
-                    @enderror
                 </div>
 
                 {{-- Password --}}
@@ -268,17 +260,26 @@
                         class="form-input @error('password') is-invalid @enderror"
                         placeholder="••••••••" required autocomplete="current-password">
 
-                    @error('password')
-                        <span style="color: #f87171; font-size: 0.75rem; margin-top: 6px; display: block; font-weight: 500;">
-                            <svg xmlns="http://www.w3.org/2000/svg" style="display: inline; width: 14px; height: 14px; margin-right: 4px; vertical-align: middle;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {{ $message }}
-                        </span>
-                    @enderror
                 </div>
 
-                <button type="submit" class="btn-submit" style="margin-top: 40px">
+                {{-- Peringatan Error (Tampil di atas tombol login) --}}
+                @if ($errors->any())
+                    <div style="background-color: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px; padding: 12px; margin-bottom: 24px;">
+                        <div style="color: #ef4444; font-size: 0.875rem; font-weight: 600; display: flex; align-items: center; margin-bottom: 6px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="width: 18px; height: 18px; margin-right: 6px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Error:
+                        </div>
+                        <ul style="color: #b91c1c; font-size: 0.75rem; margin: 0; padding-left: 26px; list-style-type: disc;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <button type="submit" class="btn-submit" style="margin-top: 24px">
                     Log In
                 </button>
             </form>
