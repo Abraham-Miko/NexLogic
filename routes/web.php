@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\SubWilayahController;
@@ -22,9 +23,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('superadmin')->name('superadmin.')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('superadmin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // --- MANAJEMEN SISWA ---
     Route::get('/siswa', [UserController::class, 'indexSiswa'])->name('siswa');
     Route::get('/siswa/create', [UserController::class, 'createSiswa'])->name('siswa.create');
@@ -32,6 +31,8 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/siswa/{id}/edit', [UserController::class, 'editSiswa'])->name('siswa.edit');
     Route::put('/siswa/{id}', [UserController::class, 'updateSiswa'])->name('siswa.update');
     Route::delete('/siswa/{id}', [UserController::class, 'destroySiswa'])->name('siswa.destroy');
+    Route::get('/siswa/download-template', [UserController::class, 'downloadTemplateSiswa'])->name('siswa.template');
+    Route::post('/siswa/import', [UserController::class, 'importSiswa'])->name('siswa.import');
 
     //  --- MANAJEMEN GURU ---
     Route::get('/guru', [UserController::class, 'indexGuru'])->name('guru');
@@ -40,6 +41,8 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/guru/{id}/edit', [UserController::class, 'editGuru'])->name('guru.edit');
     Route::put('/guru/{id}', [UserController::class, 'updateGuru'])->name('guru.update');
     Route::delete('/guru/{id}', [UserController::class, 'destroyGuru'])->name('guru.destroy');
+    Route::get('/guru/download-template', [UserController::class, 'downloadTemplateGuru'])->name('guru.template');
+    Route::post('/guru/import', [UserController::class, 'importGuru'])->name('guru.import');
 
     // Rute Wilayah
     Route::get('/wilayah', [WilayahController::class, 'index'])->name('wilayah');
