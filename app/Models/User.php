@@ -48,6 +48,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function subWilayah()
+    {
+        return $this->belongsTo(SubWilayah::class, 'sub_wilayah_id');
+    }
+    public function subWilayahs() // Gunakan akhiran 's' karena jomok
+    {
+        return $this->hasMany(SubWilayah::class, 'guru_id');
+    }
     protected function avatarUrl(): Attribute
     {
         return Attribute::make(

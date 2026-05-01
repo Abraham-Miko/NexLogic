@@ -13,7 +13,8 @@ class UserController extends Controller
         $totalSiswa = User::where('role', 'siswa')->count();
         $siswaAktif = User::where('role', 'siswa')->where('status', 'aktif')->count();
         $siswaTidakAktif = User::where('role', 'siswa')->where('status', 'tidak_aktif')->count();
-
+        // $subWilayah = User::where('role', 'siswa')->with(['subWilayah.wilayah'])->get();
+        // dd($subWilayah);
         $siswaBaru = User::where('role', 'siswa')
                          ->whereMonth('created_at', Carbon::now()->month)
                          ->whereYear('created_at', Carbon::now()->year)
@@ -34,6 +35,7 @@ class UserController extends Controller
         })
 
         ->latest()
+        ->with('subWilayah.wilayah')
         ->paginate(10)
         ->withQueryString();
         return view('superadmin.siswa.index', compact(
@@ -146,6 +148,7 @@ class UserController extends Controller
         })
 
         ->latest()
+        ->withCount('subWilayahs')
         ->paginate(10)
         ->withQueryString();
         return view('superadmin.guru.index', compact(

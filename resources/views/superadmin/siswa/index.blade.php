@@ -133,7 +133,7 @@
                                 </th>
                                 <th scope="col" class="px-6 py-4 font-medium">NIS</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Nama Lengkap</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Kode Wilayah</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Sub Wilayah</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Jenis Kelamin</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Nilai</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Status</th>
@@ -154,18 +154,54 @@
                                         <span class="text-white font-medium">{{ $data->nama }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">{{ $data->kode_wilayah }}</td>
+                                <td class="px-6 py-4">
+                                    @if($data->subWilayah)
+                                        <!-- Jika siswa SUDAH punya kelas -->
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-indigo-400">
+                                                {{ $data->subWilayah->nama_sub_wilayah }}
+                                            </span>
+
+                                            <!-- Opsional: Menampilkan nama wilayah (Angkatannya) di bawahnya dengan teks kecil -->
+                                            @if($data->subWilayah->wilayah)
+                                            <span class="text-xs text-gray-500 mt-0.5">
+                                                {{ $data->subWilayah->wilayah->nama_wilayah }}
+                                            </span>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <!-- Jika siswa BELUM punya kelas (Luntang-lantung) -->
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                            Belum Ada Kelas
+                                        </span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">
                                     @if ($data->jenis_kelamin == 'L')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-blue-900/40 text-blue-400 border border-blue-800/50">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                            Pria
-                                        </span>
+                                        <div class="flex items-center gap-2 text-blue-400">
+                                            <!-- Ikon Mars (Laki-laki) -->
+                                            <div class="w-7 h-7 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="10" cy="14" r="5"></circle>
+                                                    <line x1="13.5" y1="10.5" x2="21" y2="3"></line>
+                                                    <polyline points="16 3 21 3 21 8"></polyline>
+                                                </svg>
+                                            </div>
+                                            <span class="text-sm font-medium">Laki-laki</span>
+                                        </div>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-pink-900/40 text-pink-400 border border-pink-800/50">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                        Wanita
-                                    </span>
+                                        <div class="flex items-center gap-2 text-pink-400">
+                                            <!-- Ikon Venus (Perempuan) -->
+                                            <div class="w-7 h-7 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center">
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="10" r="5"></circle>
+                                                    <line x1="12" y1="15" x2="12" y2="22"></line>
+                                                    <line x1="9" y1="19" x2="15" y2="19"></line>
+                                                </svg>
+                                            </div>
+                                            <span class="text-sm font-medium">Perempuan</span>
+                                        </div>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">0</td>
@@ -268,8 +304,6 @@
         });
     }
 
-    // 2. Notifikasi Sukses Otomatis (Bonus)
-    // Menangkap pesan 'success' dari Controller setelah Create/Update/Delete berhasil
     document.addEventListener("DOMContentLoaded", function() {
         @if(session('success'))
             Swal.fire({

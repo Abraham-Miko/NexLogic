@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\SubWilayahController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -38,6 +40,21 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/guru/{id}/edit', [UserController::class, 'editGuru'])->name('guru.edit');
     Route::put('/guru/{id}', [UserController::class, 'updateGuru'])->name('guru.update');
     Route::delete('/guru/{id}', [UserController::class, 'destroyGuru'])->name('guru.destroy');
+
+    // Rute Wilayah
+    Route::get('/wilayah', [WilayahController::class, 'index'])->name('wilayah');
+    Route::post('/wilayah', [WilayahController::class, 'store'])->name('wilayah.store');
+    Route::put('/wilayah/{id}', [WilayahController::class, 'update'])->name('wilayah.update');
+    Route::delete('/wilayah/{id}', [WilayahController::class, 'destroy'])->name('wilayah.destroy');
+
+    // Rute Sub Wilayah (Detail)
+    Route::get('/wilayah/{id}', [WilayahController::class, 'show'])->name('wilayah.show');
+    Route::post('/sub-wilayah', [SubWilayahController::class, 'store'])->name('subwilayah.store');
+    Route::put('/sub-wilayah/{id}', [SubWilayahController::class, 'update'])->name('subwilayah.update');
+    Route::delete('/sub-wilayah/{id}', [SubWilayahController::class, 'destroy'])->name('subwilayah.destroy');
+    Route::get('/sub-wilayah/{id}', [SubWilayahController::class, 'show'])->name('subwilayah.show');
+    Route::post('/sub-wilayah/{id}/assign-siswa', [SubWilayahController::class, 'assignSiswa'])->name('subwilayah.assign_siswa');
+    Route::post('/sub-wilayah/remove-siswa/{siswa_id}', [SubWilayahController::class, 'removeSiswa'])->name('subwilayah.remove_siswa');
 });
 
 require __DIR__.'/auth.php';
