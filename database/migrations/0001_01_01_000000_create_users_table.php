@@ -19,12 +19,8 @@ return new class extends Migration
             $table->enum('jenis_kelamin', ['L', 'P'])->nullable();
             $table->enum('status', ['aktif', 'tidak_aktif'])->default('aktif');
             $table->foreignId('sub_wilayah_id')->nullable();
-            $table->enum('role', ['siswa', 'guru', 'superadmin'])->default('siswa');
+            $table->enum('role', ['siswa', 'guru', 'super_admin'])->default('siswa');
             $table->rememberToken();
-            $table->timestamps();
-        });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
@@ -44,9 +40,3 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
-    }
-};

@@ -244,12 +244,12 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                {{-- Email --}}
+                {{-- nomor_induk --}}
                 <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input id="email" type="email" name="email"
-                        class="form-input @error('email') is-invalid @enderror"
-                        placeholder="contoh@siswa.com" required autofocus autocomplete="username">
+                    <label for="nomor_induk" class="form-label">Nomor Induk</label>
+                    <input id="nomor_induk" type="string" name="nomor_induk"
+                        class="form-input @error('nomor_induk') is-invalid @enderror"
+                        placeholder="22000000" required autofocus autocomplete="username">
 
                 </div>
 

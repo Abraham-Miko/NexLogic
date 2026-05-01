@@ -58,4 +58,15 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
     Route::post('/sub-wilayah/remove-siswa/{siswa_id}', [SubWilayahController::class, 'removeSiswa'])->name('subwilayah.remove_siswa');
 });
 
+Route::middleware('auth')->group(function () {
+    // Route untuk menampilkan halaman profil (sesuaikan nama view/jalurnya jika berbeda)
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // Route untuk memproses update profil (Ini yang dipanggil di action form kamu)
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Route untuk memproses update password (jika kamu nanti membuat logic passwordnya)
+    // Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
+});
+
 require __DIR__.'/auth.php';
