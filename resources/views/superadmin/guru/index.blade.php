@@ -111,16 +111,24 @@
                             </a>
                         @endif
                     </form>
-                    <div class="shrink-0 w-full md:w-auto mt-4 md:mt-0">
-                            <a href="{{ route('superadmin.guru.create') }}"
-                            class="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors shadow-lg shadow-green-500/20 w-full md:w-auto">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
-                                Tambah Guru Baru
-                            </a>
-                        </div>
+                    <div class="shrink-0 w-full md:w-auto mt-4 md:mt-0 flex flex-col sm:flex-row gap-3">
+                        <!-- Tombol Download Template Excel (Secondary Action) -->
+                        <a href="{{ route('superadmin.guru.template') }}"
+                        class="flex items-center justify-center gap-2 bg-[#1e243b] border border-emerald-500/50 hover:bg-emerald-500/10 text-emerald-400 text-sm font-medium px-5 py-2.5 rounded-lg transition-colors w-full md:w-auto">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Download Template
+                        </a>
+                        <a href="{{ route('superadmin.guru.create') }}"
+                        class="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors shadow-lg shadow-green-500/20 w-full md:w-auto">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Tambah Guru Baru
+                        </a>
                     </div>
+                </div>
 
                 <!-- Data Table -->
                 <div class="bg-[#1e243b] border border-slate-600 rounded-xl overflow-hidden">
@@ -243,11 +251,19 @@
         <!-- ==================== FOOTER / LOGS & PAGINATION ==================== -->
         <div class="border-t border-slate-700 bg-[#151b2b]">
             <!-- Terminal Log Ticker -->
-            <div class="px-6 py-2 border-b border-slate-700 font-soal text-[11px] text-gray-400 tracking-wider flex gap-4 overflow-hidden whitespace-nowrap">
-                <span>> [10:08:00] SUCCESS: SuperAdmin_Raka created new class "X-TKJ-2"</span>
-                <span>> [10:08:05] UPDATE: User ID 20260001 status changed to Inactive</span>
-            </div>
+            <div class="px-6 py-2 border-b border-slate-700 font-mono text-[11px] text-gray-400 tracking-wider overflow-hidden whitespace-nowrap relative flex items-center">
 
+                <div class="w-full overflow-hidden">
+                    <div class="animate-ticker gap-8">
+                        @forelse($logs as $log)
+                            <!-- Menggunakan array syntax ['key'] -->
+                            <span>> [{{ $log['waktu'] }}] <span class="text-{{ $log['tipe_aksi'] == 'DELETE' ? 'red' : ($log['tipe_aksi'] == 'UPDATE' ? 'amber' : 'emerald') }}-400">{{ $log['tipe_aksi'] }}</span>: {{ $log['deskripsi'] }}</span>
+                        @empty
+                            <span>> Menunggu aktivitas sistem...</span>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
             <!-- Pagination -->
             <div class="mt-8 mb-8 w-full flex justify-center">
                 {{ $guru->links('vendor.pagination.tailwind') }}

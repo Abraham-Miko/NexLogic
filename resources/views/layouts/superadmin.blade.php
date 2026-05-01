@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NexLogic | Superadmin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- STYLING RUNNING TEXT --}}
+    <style>
+    /* Animasi untuk efek running text (ticker) */
+    @keyframes ticker {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+    .animate-ticker {
+        display: inline-flex;
+        animation: ticker 25s linear infinite; /* Angka 25s mengatur kecepatan */
+    }
+    .animate-ticker:hover {
+        animation-play-state: paused;
+    }
+</style>
 </head>
 <body class="bg-[#111827] text-gray-300 font-sans">
     <div class="min-h-screen flex">
