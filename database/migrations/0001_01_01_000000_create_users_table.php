@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('jenis_kelamin', ['L', 'P'])->nullable();
             $table->enum('status', ['aktif', 'tidak_aktif'])->default('aktif');
-            $table->string('sub_kode_wilayah')->nullable();
+            $table->foreignId('sub_wilayah_id')->nullable();
             $table->enum('role', ['siswa', 'guru', 'superadmin'])->default('siswa');
             $table->rememberToken();
             $table->timestamps();
