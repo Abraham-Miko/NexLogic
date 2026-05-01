@@ -24,7 +24,7 @@ class User extends Authenticatable
         'nama',
         'nomor_induk',
         'password',
-        'sub_kode_wilayah',
+        'sub_wilayah_id',
         'jenis_kelamin',
         'status',
         'role',
