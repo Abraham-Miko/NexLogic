@@ -13,7 +13,7 @@
     .topbar-logo:hover {
         opacity: 0.8;
     }
-    
+
     .btn-login, .btn-register {
         display: inline-flex;
         align-items: center;
@@ -63,8 +63,8 @@
     .user-dropdown-btn {
         display: flex;
         align-items: center;
-        gap: 8px; 
-        padding: 5px 14px 5px 6px; 
+        gap: 8px;
+        padding: 5px 14px 5px 6px;
         border-radius: 30px;
         background: rgba(124, 58, 237, 0.08);
         border: 1px solid rgba(99, 102, 241, 0.2);
@@ -134,7 +134,7 @@
         transform: translateX(4px); /* Bergeser sedikit ke kanan */
         box-shadow: inset 3px 0 0 #94fa8b; /* Garis nyala di sebelah kiri */
     }
-    
+
     .dropdown-item:hover svg {
         opacity: 1;
         color: #a78bfa;
@@ -168,20 +168,20 @@
     <div class="topbar-actions">
         @auth
             <div x-data="{ open: false }" class="relative">
-                
+
                 <button @click="open = !open" class="user-dropdown-btn">
                     {{-- Foto Profil (Hanya 1 huruf awal berkat &length=1) --}}
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=7c3aed&color=fff&rounded=true&length=1" 
-                         alt="Profil" 
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nama) }}&background=7c3aed&color=fff&rounded=true&length=1"
+                         alt="Profil"
                          style="width: 26px; height: 26px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
-                    
-                    <span>Halo, {{ explode(' ', trim(Auth::user()->name))[0] }}</span>
-                    
+
+                    <span>Halo, {{ explode(' ', trim(Auth::user()->nama))[0] }}</span>
+
                     <svg xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px; flex-shrink: 0;" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
                 </button>
-                
+
                 {{-- Menu Dropdown Modern --}}
                 <div x-show="open" @click.outside="open = false"
                      x-transition:enter="transition ease-out duration-150"
@@ -191,7 +191,7 @@
                      x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                      x-transition:leave-end="opacity-0 translate-y-[-10px] scale-95"
                      class="absolute right-0 mt-3 w-56 z-50 dropdown-menu">
-                    
+
                     <a href="{{ route('profile.edit') }}" class="dropdown-item dropdown-item-edit-profil">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -212,7 +212,7 @@
                     </a>
 
                     <hr class="dropdown-divider">
-                    
+
                     <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                         @csrf
                         <button type="submit" class="dropdown-item danger">
