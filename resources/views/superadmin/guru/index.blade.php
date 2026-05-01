@@ -132,7 +132,7 @@
                                 </th>
                                 <th scope="col" class="px-6 py-4 font-medium">NIG</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Nama Lengkap</th>
-                                <th scope="col" class="px-6 py-4 font-medium">Jumlah Kelas</th>
+                                <th scope="col" class="px-6 py-4 font-medium">Jumlah Sub Wilayah</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Jenis Kelamin</th>
                                 <th scope="col" class="px-6 py-4 font-medium">Status</th>
                                 <th scope="col" class="px-6 py-4 font-medium"></th>
@@ -152,18 +152,32 @@
                                         <span class="text-white font-medium">{{ $data->nama }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">0</td>
+                                <td class="px-6 py-4">{{ $data->sub_wilayahs_count }}</td>
                                 <td class="px-6 py-4">
                                     @if ($data->jenis_kelamin == 'L')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-blue-900/40 text-blue-400 border border-blue-800/50">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                            Pria
-                                        </span>
+                                        <div class="flex items-center gap-2 text-blue-400">
+                                            <!-- Ikon Mars (Laki-laki) -->
+                                            <div class="w-7 h-7 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="10" cy="14" r="5"></circle>
+                                                    <line x1="13.5" y1="10.5" x2="21" y2="3"></line>
+                                                    <polyline points="16 3 21 3 21 8"></polyline>
+                                                </svg>
+                                            </div>
+                                            <span class="text-sm font-medium">Laki-laki</span>
+                                        </div>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-pink-900/40 text-pink-400 border border-pink-800/50">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                        Wanita
-                                    </span>
+                                        <div class="flex items-center gap-2 text-pink-400">
+                                            <!-- Ikon Venus (Perempuan) -->
+                                            <div class="w-7 h-7 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center">
+                                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="10" r="5"></circle>
+                                                    <line x1="12" y1="15" x2="12" y2="22"></line>
+                                                    <line x1="9" y1="19" x2="15" y2="19"></line>
+                                                </svg>
+                                            </div>
+                                            <span class="text-sm font-medium">Perempuan</span>
+                                        </div>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
