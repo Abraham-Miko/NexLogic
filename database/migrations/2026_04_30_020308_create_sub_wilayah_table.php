@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('wilayah_id')->constrained('wilayah');
             $table->string('nama_sub_wilayah');
             $table->foreignId('guru_id')->constrained('users');
+            $table->string('kode_sub_wilayah');
             $table->boolean('materi_1_aktif')->default(false);
             $table->boolean('materi_2_aktif')->default(false);
             $table->boolean('materi_3_aktif')->default(false);
