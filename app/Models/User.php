@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SiswaTemplateExport;
 
 class User extends Authenticatable
 {
@@ -48,6 +50,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function subWilayahs(){
+
+    return $this->hasMany(SubWilayah::class, 'guru_id');
+
+    }
+
+    public function subWilayah(){
+
+        return $this->belongsTo(SubWilayah::class, 'sub_wilayah_id');
+
+    }
+
+    public function wilayahs(){
+
+        return $this->belongsToMany(Wilayah::class, 'guru_wilayah', 'guru_id', 'wilayah_id');
+
+    }
+
     protected function avatarUrl(): Attribute
     {
         return Attribute::make(
