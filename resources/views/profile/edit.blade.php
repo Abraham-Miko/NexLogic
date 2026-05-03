@@ -893,8 +893,11 @@
                             <path stroke-linecap="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
                     </div>
-                    <p class="info-label">Sub Kode Wilayah</p>
-                    <p class="info-value">{{ Auth::user()->sub_kode_wilayah ?? Auth::user()->sub_wilayah_id ?? 'Tidak Diatur' }}</p>
+                    <p class="info-label">Sub Wilayah</p>
+                    <p class="info-value">{{
+                    Auth::user()->sub_wilayah_id ?
+                    Auth::user()->subWilayah->wilayah->nama_wilayah . ' - ' . Auth::user()->subWilayah->nama_sub_wilayah :
+                    'Tidak Diatur' }}</p>
                 </div>
 
             </div>

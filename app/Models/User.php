@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SiswaTemplateExport;
+use App\Models\SubWilayah;
 
 class User extends Authenticatable
 {
