@@ -287,12 +287,26 @@
 
                     <div class="anim-fade-4" style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
                         @auth
-                            <a href="{{ route('dashboard') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                🎮 &nbsp;Lanjut Belajar
-                            </a>
-                            <a href="#materi" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: transparent; color: #cbd5e1; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: 1.5px solid rgba(99, 102, 241, 0.3); cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                📚 &nbsp;Lihat Materi
-                            </a>
+                            @if(auth()->user()->role === 'siswa' && !auth()->user()->sub_wilayah_id)
+                                <form action="#" method="POST" style="display: flex; gap: 14px; width: 100%; max-width: 450px;">
+                                    @csrf
+                                    <input type="text" name="kode_kelas" placeholder="Masukkan Kode Kelas/Wilayah" required
+                                        style="flex: 1; padding: 13px 20px; border-radius: 12px; background: #080e1a; color: #cbd5e1; font-size: 0.95rem; font-weight: 500; border: 1.5px solid rgba(99, 102, 241, 0.3); outline: none; font-family: 'Plus Jakarta Sans', sans-serif; transition: border-color 0.2s;"
+                                        onfocus="this.style.borderColor='rgba(99, 102, 241, 0.6)'"
+                                        onblur="this.style.borderColor='rgba(99, 102, 241, 0.3)'"
+                                    >
+                                    <button type="submit" class="btn-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                        Submit
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('dashboard') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                    🎮 &nbsp;Lanjut Belajar
+                                </a>
+                                <a href="#materi" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: transparent; color: #cbd5e1; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: 1.5px solid rgba(99, 102, 241, 0.3); cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                    📚 &nbsp;Lihat Materi
+                                </a>
+                            @endif
                         @else
                             <a href="{{ route('login') }}" class="btn-primary" style="margin-left: 7em; display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
                                 🎮 &nbsp;Mulai Belajar
