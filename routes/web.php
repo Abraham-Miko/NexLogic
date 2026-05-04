@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubWilayahController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WilayahController;
-use App\Http\Controllers\SubWilayahController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -13,7 +14,16 @@ Route::get('/', function () {
 })->name('/');
 
 Route::get('/dashboard', function () {
+    $role = Auth::user()->role;
+
+    if ($role === 'super_admin') {
+        // Arahkan ke rute khusus super admin
+        return redirect()->route('superadmin.dashboard');
+    }
+
+    // Jika user biasa, tampilkan view dashboard biasa
     return view('dashboard');
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -22,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('superadmin')->name('superadmin.')->group(function () {
+Route::prefix('superadmin')->name('superadmin.')->middleware(['auth', 'role:super_admin'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // --- MANAJEMEN SISWA ---

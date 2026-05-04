@@ -295,15 +295,27 @@
 
             <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
 
-            <a href="{{ route('dashboard') }}" class="nav-item nav-dashboard {{ request()->routeIs('dashboard') ? 'active' : '' }}" title="Dashboard">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                    <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                    <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                </svg>
-                <span class="nav-label">Dashboard</span>
-            </a>
+            @superadmin
+                <a href="{{ route('superadmin.dashboard') }}" class="nav-item nav-dashboard {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}" title="Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+            @else
+                <a href="{{ route('dashboard') }}" class="nav-item nav-dashboard {{ request()->routeIs('dashboard') ? 'active' : '' }}" title="Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+            @endsuperadmin
 
             <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
 
