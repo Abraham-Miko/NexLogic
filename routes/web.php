@@ -73,12 +73,6 @@ Route::prefix('superadmin')->name('superadmin.')->middleware(['auth', 'role:supe
     Route::post('/sub-wilayah/remove-siswa/{siswa_id}', [SubWilayahController::class, 'removeSiswa'])->name('subwilayah.remove_siswa');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
 // --- Route Fitur Puzzle (NexLogic - Siswa/Umum) ---
 Route::middleware(['auth', 'verified'])->prefix('puzzle')->name('puzzle.')->group(function () {
     Route::get('/', [PuzzleController::class, 'index'])->name('index');
@@ -95,3 +89,5 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('superadmin/
     Route::put('/{puzzle}', [SuperAdminPuzzleController::class, 'update'])->name('update');
     Route::delete('/{puzzle}', [SuperAdminPuzzleController::class, 'destroy'])->name('destroy');
 });
+
+require __DIR__.'/auth.php';    
