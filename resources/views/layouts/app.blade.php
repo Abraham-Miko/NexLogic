@@ -266,20 +266,10 @@
 
                 {{-- Page Content --}}
                 <main class="page-slot">
-                    {{ $slot }} 
+                    {{ $slot }}
                 </main>
 
             </div>
         </div>
     </body>
 </html>
-
-{{-- 
-    Catatan:
-    - Warna, ukuran, dan jarak pada CSS dapat disesuaikan dengan kebutuhan desain.
-    - Animasi pada sidebar menggunakan transisi CSS untuk efek yang lebih halus.
-    - Struktur HTML menggunakan Blade components untuk modularitas dan kemudahan pemeliharaan.
-    - Pastikan untuk menyesuaikan rute dan ikon sesuai dengan kebutuhan aplikasi Anda.
-    - Kode ini fokus pada layout dan navigasi, sehingga konten halaman akan ditempatkan di dalam slot {{ $slot }} pada bagian <main class="page-slot">.
-    - Untuk ikon, saya menggunakan SVG inline agar mudah dikustomisasi dan tidak bergantung pada library eksternal. Anda bisa menggantinya dengan ikon dari library seperti FontAwesome atau Heroicons jika diinginkan.
---}}

@@ -316,11 +316,25 @@
 
             <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
 
-            <a href="" class="nav-item nav-puzzle {{ request()->routeIs('tantangan*') ? 'active' : '' }}" title="Puzzle">
+            @php
+                // Tambahkan tanda tanya sebelum -> untuk menghindari error jika user null
+                $isSuperAdmin = auth()->user()?->hasRole('super_admin') ?? false;
+
+                $route = $isSuperAdmin ? 'superadmin.puzzle.index' : 'puzzle.index';
+
+                // Cek aktif
+                $isActive = $isSuperAdmin
+                    ? request()->routeIs('superadmin.puzzle.*')
+                    : request()->routeIs('puzzle.*');
+            @endphp
+
+            <a href="{{ route($route) }}"
+            class="nav-item nav-puzzle {{ $isActive ? 'active' : '' }}"
+            title="Puzzle">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
                 </svg>
-                <span class="nav-label">Puzzle</span>
+                <span class="nav-label">{{ $isSuperAdmin ? 'Kelola Puzzle' : 'Tantangan Puzzle' }}</span>
             </a>
 
             <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
