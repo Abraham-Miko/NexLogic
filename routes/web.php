@@ -73,21 +73,23 @@ Route::prefix('superadmin')->name('superadmin.')->middleware(['auth', 'role:supe
     Route::post('/sub-wilayah/remove-siswa/{siswa_id}', [SubWilayahController::class, 'removeSiswa'])->name('subwilayah.remove_siswa');
 });
 
-// --- Route Fitur Puzzle (NexLogic - Siswa/Umum) ---
 Route::middleware(['auth', 'verified'])->prefix('puzzle')->name('puzzle.')->group(function () {
+
     Route::get('/', [PuzzleController::class, 'index'])->name('index');
     Route::get('/{puzzle}', [PuzzleController::class, 'show'])->name('show');
     Route::post('/{puzzle}/jawab', [PuzzleController::class, 'jawab'])->name('jawab');
+
 });
 
-// --- Route Manajemen Puzzle (NexLogic - Super Admin) ---
 Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('superadmin/puzzle')->name('superadmin.puzzle.')->group(function () {
-    Route::get('/', [SuperAdminPuzzleController::class, 'index'])->name('index');
-    Route::get('/create', [SuperAdminPuzzleController::class, 'create'])->name('create');
-    Route::post('/', [SuperAdminPuzzleController::class, 'store'])->name('store');
-    Route::get('/{puzzle}/edit', [SuperAdminPuzzleController::class, 'edit'])->name('edit');
-    Route::put('/{puzzle}', [SuperAdminPuzzleController::class, 'update'])->name('update');
-    Route::delete('/{puzzle}', [SuperAdminPuzzleController::class, 'destroy'])->name('destroy');
-});
 
-require __DIR__.'/auth.php';    
+        Route::get('/', [SuperAdminPuzzleController::class, 'index'])->name('index');
+        Route::get('/create', [SuperAdminPuzzleController::class, 'create'])->name('create');
+        Route::post('/', [SuperAdminPuzzleController::class, 'store'])->name('store');
+        Route::get('/{puzzle}/edit', [SuperAdminPuzzleController::class, 'edit'])->name('edit');
+        Route::put('/{puzzle}', [SuperAdminPuzzleController::class, 'update'])->name('update');
+        Route::delete('/{puzzle}', [SuperAdminPuzzleController::class, 'destroy'])->name('destroy');
+
+    });
+
+require __DIR__.'/auth.php';

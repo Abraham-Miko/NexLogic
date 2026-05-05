@@ -15,7 +15,7 @@ class CheckRole
     {
         // 1. Cek apakah user sudah login
         if (!$request->user()) {
-            // Jika fitur puzzle diakses via API/AJAX
+            // Jika fitur puzzle diakses via API/AJAX (opsional, berguna jika puzzle interaktif tanpa reload halaman)
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Unauthenticated.'], 401);
             }

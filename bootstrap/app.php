@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
 
         // Daftarkan alias 'role' agar bisa dipakai di route
-        // Contoh pemakaian: ->middleware('role:super_admin') atau ->middleware('role:guru,super_admin')
+        // Contoh pemakaian: ->middleware('role:super_admin')
         $middleware->alias([
             'role' => CheckRole::class,
         ]);

@@ -76,7 +76,15 @@ class AppServiceProvider extends ServiceProvider
 
         /*
         |------------------------------------------------------------------
-        | RATE LIMITER — Keamanan API
+        | MIDDLEWARE ALIAS — Daftarkan alias 'role' di bootstrap/app.php
+        |------------------------------------------------------------------
+        | Di Laravel 13, middleware alias didaftarkan di bootstrap/app.php.
+        | Lihat file bootstrap/app.php di bawah untuk kode lengkapnya.
+        */
+
+        /*
+        |------------------------------------------------------------------
+        | RATE LIMITER
         |------------------------------------------------------------------
         */
         RateLimiter::for('api', function (Request $request) {
