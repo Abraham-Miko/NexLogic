@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PuzzleController;
 use App\Http\Controllers\SubWilayahController;
+use App\Http\Controllers\SuperAdminPuzzleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WilayahController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -72,14 +74,24 @@ Route::prefix('superadmin')->name('superadmin.')->middleware(['auth', 'role:supe
 });
 
 Route::middleware('auth')->group(function () {
-    // Route untuk menampilkan halaman profil (sesuaikan nama view/jalurnya jika berbeda)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-
-    // Route untuk memproses update profil (Ini yang dipanggil di action form kamu)
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-    // Route untuk memproses update password (jika kamu nanti membuat logic passwordnya)
-    // Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+// --- Route Fitur Puzzle (NexLogic - Siswa/Umum) ---
+Route::middleware(['auth', 'verified'])->prefix('puzzle')->name('puzzle.')->group(function () {
+    Route::get('/', [PuzzleController::class, 'index'])->name('index');
+    Route::get('/{puzzle}', [PuzzleController::class, 'show'])->name('show');
+    Route::post('/{puzzle}/jawab', [PuzzleController::class, 'jawab'])->name('jawab');
+});
+
+// --- Route Manajemen Puzzle (NexLogic - Super Admin) ---
+Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('superadmin/puzzle')->name('superadmin.puzzle.')->group(function () {
+    Route::get('/', [SuperAdminPuzzleController::class, 'index'])->name('index');
+    Route::get('/create', [SuperAdminPuzzleController::class, 'create'])->name('create');
+    Route::post('/', [SuperAdminPuzzleController::class, 'store'])->name('store');
+    Route::get('/{puzzle}/edit', [SuperAdminPuzzleController::class, 'edit'])->name('edit');
+    Route::put('/{puzzle}', [SuperAdminPuzzleController::class, 'update'])->name('update');
+    Route::delete('/{puzzle}', [SuperAdminPuzzleController::class, 'destroy'])->name('destroy');
+});
