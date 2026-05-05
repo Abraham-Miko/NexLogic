@@ -79,8 +79,9 @@ Route::prefix('guru')->name('guru.')->group(function () {
     Route::post('/wilayah/join', [GuruController::class, 'joinWilayah']);
     Route::get('/subwilayah/create', [GuruController::class, 'createSubwilayah'])->name('subwilayah.create');
     Route::post('/subwilayah/store', [GuruController::class, 'storeSubwilayah'])->name('subwilayah.store');
-    Route::get('/subwilayah/{id}', [GuruController::class, 'showSubwilayah'])->name('subwilayah.show');
-    Route::post('/subwilayah/{id}/tambah-siswa', [GuruController::class, 'tambahSiswaManual'])->name('subwilayah.addSiswa');
+    Route::get('/subwilayah/{id}', [GuruController::class, 'show'])->name('subwilayah.show');
+    Route::post('/subwilayah/{id}/tambah-siswa', [GuruController::class, 'tambahSiswaManual'])->name('subwilayah.show');
+    Route::post('/subwilayah/{id}/assign-siswa', [GuruController::class, 'assignSiswa'])->name('subwilayah.assign_siswa');
     Route::delete('/subwilayah/{id}/keluarkan-siswa/{siswa_id}', [GuruController::class, 'hapusSiswa'])->name('subwilayah.removeSiswa');
 
     // Content Manager
@@ -100,6 +101,7 @@ Route::middleware('auth')->group(function () {
 
     // Route untuk memproses update profil (Ini yang dipanggil di action form kamu)
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 // --- Route Fitur Puzzle (NexLogic - Siswa/Umum) ---
 Route::middleware(['auth', 'verified'])->prefix('puzzle')->name('puzzle.')->group(function () {
     Route::get('/', [PuzzleController::class, 'index'])->name('index');

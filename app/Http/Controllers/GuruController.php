@@ -74,17 +74,21 @@ class GuruController extends Controller
         return redirect()->route('guru.dashboard')->with('success', 'Kelas berhasil dibuat!');
     }
 
-    public function showSubWilayah($id) {
-        // Mengambil data kelas dan user yang berperan sebagai siswa di kelas tersebut
-        $kelas = \App\Models\SubWilayah::with('siswa')->findOrFail($id);
+    // public function showSubWilayah($id) {
+    //     // Mengambil data kelas dan user yang berperan sebagai siswa di kelas tersebut beserta data penilaians
+    //     $kelas = \App\Models\SubWilayah::with(['siswa' => function($query) use ($id) {
+    //         $query->with(['penilaians' => function($q) use ($id) {
+    //             $q->where('sub_wilayah_id', $id);
+    //         }]);
+    //     }])->findOrFail($id);
 
-        // Keamanan: Pastikan guru yang login adalah pemilik kelas ini
-        if ($kelas->guru_id !== auth()->id()) {
-            abort(403);
-        }
+    //     // Keamanan: Pastikan guru yang login adalah pemilik kelas ini
+    //     if ($kelas->guru_id !== auth()->id()) {
+    //         abort(403);
+    //     }
 
-        return view('guru.subwilayah.index', compact('kelas'));
-    }
+    //     return view('guru.subwilayah.index', compact('kelas'));
+    // }
 
     // --- CONTENT MANAGER ---
     public function contentManager()
@@ -286,5 +290,46 @@ class GuruController extends Controller
         }
 
         return response()->json(['message' => 'Soal berhasil dicopy']);
+    }
+
+        public function show($id)
+    {
+        $subWilayah = SubWilayah::with(['guru', 'users' => function($query) {
+            $query->where('role', 'siswa')->orderBy('nama', 'asc');
+        }])->findOrFail($id);
+
+        // AMBIL CALON SISWA: Role Siswa, Status Aktif, dan Belum Punya Kelas
+        $calonSiswa = \App\Models\User::where('role', 'siswa')
+            ->where('status', 'aktif')
+            ->whereNull('sub_wilayah_id') // Mencari yang foreign key-nya masih kosong (NULL)
+            ->orderBy('nama', 'asc')
+            ->get();
+
+        // Mengambil data kelas dan user yang berperan sebagai siswa di kelas tersebut beserta data penilaians
+        $kelas = \App\Models\SubWilayah::with(['siswa' => function($query) use ($id) {
+            $query->with(['penilaians' => function($q) use ($id) {
+                $q->where('sub_wilayah_id', $id);
+            }]);
+        }])->findOrFail($id);
+
+        // Keamanan: Pastikan guru yang login adalah pemilik kelas ini
+        if ($kelas->guru_id !== auth()->id()) {
+            abort(403);
+        }
+        return view('guru.subwilayah.index', compact('subWilayah', 'calonSiswa', 'kelas'));
+    }
+    public function assignSiswa(Request $request, $id) {
+        $request->validate([
+            'siswa_id' => 'required|exists:users,id'
+        ]);
+
+        $siswa = \App\Models\User::findOrFail($request->siswa_id);
+
+        // Update data siswa agar masuk ke kelas (sub_wilayah) ini
+        $siswa->update([
+            'sub_wilayah_id' => $id
+        ]);
+
+        return redirect()->back()->with('success', "Siswa {$siswa->nama} berhasil dimasukkan ke kelas!");
     }
 }
