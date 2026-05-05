@@ -2,47 +2,30 @@
 
 namespace App\Exports;
 
-use App\Models\User;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SiswaTemplateExport implements FromCollection, WithHeadings, WithMapping
+// Kita gunakan 3 implementasi: WithHeadings (untuk judul kolom), ShouldAutoSize (agar lebar kolom otomatis pas), dan WithStyles (agar judulnya tebal)
+class SiswaTemplateExport implements WithHeadings, ShouldAutoSize, WithStyles
 {
-    /**
-     * Mengambil data siswa dari database
-     */
-    public function collection()
-    {
-        // Hanya ambil user dengan role 'siswa'
-        return User::where('role', 'siswa')->get();
-    }
-
-    /**
-     * Mengatur urutan kolom yang muncul di Excel
-     */
-    public function map($siswa): array
-    {
-        return [
-            $siswa->nama,
-            $siswa->nomor_induk,
-            $siswa->jenis_kelamin,
-            $siswa->subWilayah,
-            $siswa->role,
-        ];
-    }
-
-    /**
-     * Judul Kolom
-     */
     public function headings(): array
     {
+        // Ini adalah judul kolom yang akan muncul di baris pertama Excel
         return [
             'NAMA LENGKAP',
             'NOMOR INDUK',
             'JENIS KELAMIN (L/P)',
-            'SUB WILAYAH',
-            'ROLE (SISWA/GURU)',
+            'PASSWORD (Boleh Kosong)',
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        // Membuat baris pertama (judul kolom) menjadi Cetak Tebal (Bold)
+        return [
+            1    => ['font' => ['bold' => true]],
         ];
     }
 }
