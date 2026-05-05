@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GuruController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\SubWilayahController;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,26 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/sub-wilayah/{id}', [SubWilayahController::class, 'show'])->name('subwilayah.show');
     Route::post('/sub-wilayah/{id}/assign-siswa', [SubWilayahController::class, 'assignSiswa'])->name('subwilayah.assign_siswa');
     Route::post('/sub-wilayah/remove-siswa/{siswa_id}', [SubWilayahController::class, 'removeSiswa'])->name('subwilayah.remove_siswa');
+});
+
+Route::prefix('guru')->name('guru.')->group(function () {
+    Route::get('/dashboard', [GuruController::class, 'index'])->name('dashboard');
+    Route::post('/wilayah/join', [GuruController::class, 'joinWilayah']);
+    Route::get('/subwilayah/create', [GuruController::class, 'createSubwilayah'])->name('subwilayah.create');
+    Route::post('/subwilayah/store', [GuruController::class, 'storeSubwilayah'])->name('subwilayah.store');
+    Route::get('/subwilayah/{id}', [GuruController::class, 'showSubwilayah'])->name('subwilayah.show');
+    Route::post('/subwilayah/{id}/tambah-siswa', [GuruController::class, 'tambahSiswaManual'])->name('subwilayah.addSiswa');
+    Route::delete('/subwilayah/{id}/keluarkan-siswa/{siswa_id}', [GuruController::class, 'hapusSiswa'])->name('subwilayah.removeSiswa');
+
+    // Content Manager
+    Route::get('/content', [GuruController::class, 'contentManager'])->name('content');
+    Route::get('/content/kelas/{sub_wilayah_id}', [GuruController::class, 'contentKelas'])->name('content.kelas');
+    Route::post('/content/soal', [GuruController::class, 'storeSoal'])->name('content.soal.store');
+    Route::get('/content/soal/{sub_wilayah_id}/{materi_ke}/{jenis_soal}', [GuruController::class, 'getSoal'])->name('content.soal.get');
+    Route::delete('/content/soal/{id}', [GuruController::class, 'deleteSoal'])->name('content.soal.delete');
+    Route::post('/content/toggle', [GuruController::class, 'toggleMateri'])->name('content.toggle');
+    Route::get('/content/copy-options/{materi_ke}/{jenis_soal}', [GuruController::class, 'getCopyOptions'])->name('content.copy.options');
+    Route::post('/content/copy-soal', [GuruController::class, 'copySoal'])->name('content.copy.store');
 });
 
 Route::middleware('auth')->group(function () {
