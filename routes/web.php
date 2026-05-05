@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PuzzleController;
+use App\Http\Controllers\SubWilayahController;
+use App\Http\Controllers\SuperAdminPuzzleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\WilayahController;
-use App\Http\Controllers\SubWilayahController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,7 +17,16 @@ Route::get('/', function () {
 })->name('/');
 
 Route::get('/dashboard', function () {
+    $role = Auth::user()->role;
+
+    if ($role === 'super_admin') {
+        // Arahkan ke rute khusus super admin
+        return redirect()->route('superadmin.dashboard');
+    }
+
+    // Jika user biasa, tampilkan view dashboard biasa
     return view('dashboard');
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -23,7 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('superadmin')->name('superadmin.')->group(function () {
+Route::prefix('superadmin')->name('superadmin.')->middleware(['auth', 'role:super_admin'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // --- MANAJEMEN SISWA ---
@@ -88,9 +100,21 @@ Route::middleware('auth')->group(function () {
 
     // Route untuk memproses update profil (Ini yang dipanggil di action form kamu)
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-    // Route untuk memproses update password (jika kamu nanti membuat logic passwordnya)
-    // Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
+// --- Route Fitur Puzzle (NexLogic - Siswa/Umum) ---
+Route::middleware(['auth', 'verified'])->prefix('puzzle')->name('puzzle.')->group(function () {
+    Route::get('/', [PuzzleController::class, 'index'])->name('index');
+    Route::get('/{puzzle}', [PuzzleController::class, 'show'])->name('show');
+    Route::post('/{puzzle}/jawab', [PuzzleController::class, 'jawab'])->name('jawab');
 });
 
-require __DIR__.'/auth.php';
+// --- Route Manajemen Puzzle (NexLogic - Super Admin) ---
+Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('superadmin/puzzle')->name('superadmin.puzzle.')->group(function () {
+    Route::get('/', [SuperAdminPuzzleController::class, 'index'])->name('index');
+    Route::get('/create', [SuperAdminPuzzleController::class, 'create'])->name('create');
+    Route::post('/', [SuperAdminPuzzleController::class, 'store'])->name('store');
+    Route::get('/{puzzle}/edit', [SuperAdminPuzzleController::class, 'edit'])->name('edit');
+    Route::put('/{puzzle}', [SuperAdminPuzzleController::class, 'update'])->name('update');
+    Route::delete('/{puzzle}', [SuperAdminPuzzleController::class, 'destroy'])->name('destroy');
+});
+
+require __DIR__.'/auth.php';    
