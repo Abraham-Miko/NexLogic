@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('nomor_induk')->unique();
             $table->string('password');
             $table->enum('jenis_kelamin', ['L', 'P'])->nullable();
-            $table->enum('status', ['aktif', 'tidak_aktif', 'cuti'])->default('aktif');
-            $table->string('sub_kode_wilayah')->nullable();
-            $table->enum('role', ['siswa', 'guru', 'superadmin'])->default('siswa');
+            $table->enum('status', ['aktif', 'tidak_aktif'])->default('aktif');
+            $table->foreignId('sub_wilayah_id')->nullable();
+            $table->enum('role', ['siswa', 'guru', 'super_admin'])->default('siswa');
             $table->rememberToken();
             $table->timestamps();
         });
