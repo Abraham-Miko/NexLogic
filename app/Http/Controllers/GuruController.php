@@ -98,6 +98,15 @@ class GuruController extends Controller
     {
         $kelas = SubWilayah::where('id', $sub_wilayah_id)->where('guru_id', Auth::id())->firstOrFail();
         
+        $judulMateri = [
+            1 => 'Variabel & Tipe Data',
+            2 => 'Operator & Ekspresi',
+            3 => 'Input & Output',
+            4 => 'Percabangan (if/else)',
+            5 => 'Perulangan (for & while)',
+            6 => 'Fungsi & Parameter',
+        ];
+
         $materiData = [];
         for ($i = 1; $i <= 6; $i++) {
             $preTestCount = BankSoal::where('sub_wilayah_id', $sub_wilayah_id)
@@ -114,7 +123,7 @@ class GuruController extends Controller
             
             $materiData[] = [
                 'materi_ke' => $i,
-                'judul' => 'Materi ' . $i,
+                'judul' => $judulMateri[$i],
                 'is_aktif' => (bool) $kelas->$materiField,
                 'pre_test_count' => $preTestCount,
                 'post_test_count' => $postTestCount,
