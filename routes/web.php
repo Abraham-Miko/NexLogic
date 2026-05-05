@@ -7,6 +7,7 @@ use App\Http\Controllers\PuzzleController;
 use App\Http\Controllers\SubWilayahController;
 use App\Http\Controllers\SuperAdminPuzzleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GuruController;
 use App\Http\Controllers\WilayahController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,34 @@ Route::prefix('superadmin')->name('superadmin.')->middleware(['auth', 'role:supe
     Route::post('/sub-wilayah/remove-siswa/{siswa_id}', [SubWilayahController::class, 'removeSiswa'])->name('subwilayah.remove_siswa');
 });
 
+Route::prefix('guru')->name('guru.')->group(function () {
+    Route::get('/dashboard', [GuruController::class, 'index'])->name('dashboard');
+    Route::post('/wilayah/join', [GuruController::class, 'joinWilayah']);
+    Route::get('/subwilayah/create', [GuruController::class, 'createSubwilayah'])->name('subwilayah.create');
+    Route::post('/subwilayah/store', [GuruController::class, 'storeSubwilayah'])->name('subwilayah.store');
+    Route::get('/subwilayah/{id}', [GuruController::class, 'show'])->name('subwilayah.show');
+    Route::post('/subwilayah/{id}/tambah-siswa', [GuruController::class, 'tambahSiswaManual'])->name('subwilayah.show');
+    Route::post('/subwilayah/{id}/assign-siswa', [GuruController::class, 'assignSiswa'])->name('subwilayah.assign_siswa');
+    Route::delete('/subwilayah/{id}/keluarkan-siswa/{siswa_id}', [GuruController::class, 'hapusSiswa'])->name('subwilayah.removeSiswa');
+
+    // Content Manager
+    Route::get('/content', [GuruController::class, 'contentManager'])->name('content');
+    Route::get('/content/kelas/{sub_wilayah_id}', [GuruController::class, 'contentKelas'])->name('content.kelas');
+    Route::post('/content/soal', [GuruController::class, 'storeSoal'])->name('content.soal.store');
+    Route::get('/content/soal/{sub_wilayah_id}/{materi_ke}/{jenis_soal}', [GuruController::class, 'getSoal'])->name('content.soal.get');
+    Route::delete('/content/soal/{id}', [GuruController::class, 'deleteSoal'])->name('content.soal.delete');
+    Route::post('/content/toggle', [GuruController::class, 'toggleMateri'])->name('content.toggle');
+    Route::get('/content/copy-options/{materi_ke}/{jenis_soal}', [GuruController::class, 'getCopyOptions'])->name('content.copy.options');
+    Route::post('/content/copy-soal', [GuruController::class, 'copySoal'])->name('content.copy.store');
+});
+
+Route::middleware('auth')->group(function () {
+    // Route untuk menampilkan halaman profil (sesuaikan nama view/jalurnya jika berbeda)
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // Route untuk memproses update profil (Ini yang dipanggil di action form kamu)
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 // --- Route Fitur Puzzle (NexLogic - Siswa/Umum) ---
 Route::middleware(['auth', 'verified'])->prefix('puzzle')->name('puzzle.')->group(function () {
     Route::get('/', [PuzzleController::class, 'index'])->name('index');

@@ -20,7 +20,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
    /**
      * Kolom yang boleh diisi secara mass-assignment.
@@ -65,6 +65,22 @@ class User extends Authenticatable
 
         return $this->belongsTo(SubWilayah::class, 'sub_wilayah_id');
 
+    }
+
+    public function penilaians()
+    {
+        return $this->hasMany(\App\Models\Penilaian::class, 'siswa_id');
+    }
+
+    public function kelasYangDiampu()
+    {
+        return $this->hasMany(SubWilayah::class, 'guru_id');
+    }
+
+    public function wilayahYangDitempati()
+    {
+        // Menggunakan belongsToMany karena lewat tabel pivot guru_wilayah
+        return $this->belongsToMany(Wilayah::class, 'guru_wilayah', 'guru_id', 'wilayah_id');
     }
 
     public function wilayahs(){
