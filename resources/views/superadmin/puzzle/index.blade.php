@@ -31,10 +31,10 @@
                 <div>
                     <p class="text-purple-400 font-mono-code text-xs tracking-widest uppercase mb-1">Super Admin Panel</p>
                     <h1 class="font-orbitron text-2xl font-black text-white">Manajemen Puzzle</h1>
-                    <p class="text-slate-500 font-mono-code text-xs mt-1">{{ $puzzles->total() }} puzzle terdaftar</p>
+                    <p class="text-slate-500 font-mono-code text-xs mt-1">{{ $puzzle->total() }} puzzle terdaftar</p>
                 </div>
 
-                <a href="{{ route('superadmin.puzzles.create') }}"
+                <a href="{{ route('superadmin.puzzle.create') }}"
                    class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-mono-code text-sm px-5 py-2.5 rounded-xl transition-all"
                    style="box-shadow: 0 0 20px rgba(168,85,247,0.3);">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +57,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-800/60">
-                        @forelse($puzzles as $puzzle)
+                        @forelse($puzzle as $puzzle)
                         <tr class="hover:bg-slate-800/30 transition-colors">
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 font-orbitron font-bold text-sm">
@@ -86,7 +86,7 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('superadmin.puzzles.edit', $puzzle) }}"
+                                    <a href="{{ route('superadmin.puzzle.edit', $puzzle) }}"
                                        class="inline-flex items-center gap-1.5 bg-blue-600/15 hover:bg-blue-600/30 border border-blue-600/20 text-blue-400 font-mono-code text-xs px-3 py-1.5 rounded-lg transition-all">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -95,7 +95,7 @@
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('superadmin.puzzles.destroy', $puzzle) }}" method="POST"
+                                    <form action="{{ route('superadmin.puzzle.destroy', $puzzle) }}" method="POST"
                                           onsubmit="return confirm('Hapus Puzzle Level {{ $puzzle->level }}? Tindakan ini tidak bisa dibatalkan.')">
                                         @csrf
                                         @method('DELETE')
@@ -121,7 +121,7 @@
                                     </svg>
                                 </div>
                                 <p class="font-orbitron text-slate-600">Belum ada puzzle</p>
-                                <a href="{{ route('superadmin.puzzles.create') }}" class="font-mono-code text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block transition-colors">
+                                <a href="{{ route('superadmin.puzzle.create') }}" class="font-mono-code text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block transition-colors">
                                     Buat puzzle pertama →
                                 </a>
                             </td>
@@ -132,9 +132,9 @@
             </div>
 
             {{-- Pagination --}}
-            @if($puzzles->hasPages())
+            @if($puzzle->hasPages())
             <div class="mt-6 flex justify-center">
-                {{ $puzzles->links() }}
+                {{ $puzzle->links() }}
             </div>
             @endif
 
