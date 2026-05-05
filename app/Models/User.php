@@ -64,6 +64,17 @@ class User extends Authenticatable
 
     }
 
+    public function kelasYangDiampu()
+    {
+        return $this->hasMany(SubWilayah::class, 'guru_id');
+    }
+
+    public function wilayahYangDitempati()
+    {
+        // Menggunakan belongsToMany karena lewat tabel pivot guru_wilayah
+        return $this->belongsToMany(Wilayah::class, 'guru_wilayah', 'guru_id', 'wilayah_id');
+    }
+
     public function wilayahs(){
 
         return $this->belongsToMany(Wilayah::class, 'guru_wilayah', 'guru_id', 'wilayah_id');
