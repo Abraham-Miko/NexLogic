@@ -148,6 +148,8 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(12px);
             min-height: 280px;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         .course-card:not(.locked):hover {
@@ -511,11 +513,19 @@
             const searchInput = document.querySelector('.search-box input');
             
             // Store original text of titles and descriptions to allow resetting before highlighting
-            courses.forEach(course => {
+            courses.forEach((course, index) => {
                 const titleEl = course.querySelector('.card-title');
                 const descEl = course.querySelector('.card-desc');
                 course.dataset.originalTitle = titleEl.textContent;
                 course.dataset.originalDesc = descEl.textContent;
+                
+                // Add click listener for navigation
+                course.addEventListener('click', () => {
+                    if (!course.classList.contains('locked')) {
+                        // Normally you'd pass the real course ID, here we use index + 1 for demo
+                        window.location.href = `/courses/${index + 1}`;
+                    }
+                });
             });
 
             let currentFilter = 'all';

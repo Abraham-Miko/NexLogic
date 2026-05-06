@@ -20,6 +20,10 @@ Route::get('/courses', function () {
     return view('courses');
 })->middleware(['auth', 'verified'])->name('courses');
 
+Route::get('/courses/{id}', function ($id) {
+    return view('courses.show', compact('id'));
+})->middleware(['auth', 'verified'])->name('courses.show');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
