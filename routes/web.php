@@ -104,7 +104,36 @@ Route::middleware('auth')->group(function () {
 });
 // --- Route Fitur Puzzle (NexLogic - Siswa/Umum) ---
 Route::middleware(['auth', 'verified'])->prefix('puzzle')->name('puzzle.')->group(function () {
-    Route::get('/', [PuzzleController::class, 'index'])->name('index');
+    Route::get('/', function() { 
+        $user_id = auth()->id();
+        $total_skor = \App\Models\Penilaian::totalSkorPuzzle($user_id);
+        
+        $penilaian = \App\Models\Penilaian::where('siswa_id', $user_id)->get();
+        $completed_materi = $penilaian->whereNotNull('skor_puzzle')->pluck('materi_ke')->toArray();
+        $unlocked_materi = $penilaian->whereNotNull('skor_pre')->whereNotNull('skor_post')->pluck('materi_ke')->toArray();
+
+        return view('siswa.puzzle.index', compact('total_skor', 'completed_materi', 'unlocked_materi')); 
+    })->name('index');
+
+    Route::get('/materi/{id}', function($id) { 
+        return view('siswa.puzzle.puzzle_materi' . $id, ['materi_id' => $id]); 
+    })->name('materi.show');
+
+    Route::post('/materi/{id}/submit', function (\Illuminate\Http\Request $request, $id) {
+        $request->validate(['skor_total' => 'required|numeric|min:0|max:500']);
+        $user = auth()->user();
+        \App\Models\Penilaian::updateOrCreate(
+            [
+                'siswa_id' => $user->id,
+                'sub_wilayah_id' => $user->sub_wilayah_id,
+                'materi_ke' => $id
+            ],
+            [
+                'skor_puzzle' => $request->skor_total
+            ]
+        );
+        return redirect()->route('puzzle.index')->with('success', 'Puzzle Materi ' . $id . ' Selesai! Skor berhasil disimpan!');
+    })->name('materi.submit');
     Route::get('/{puzzle}', [PuzzleController::class, 'show'])->name('show');
     Route::post('/{puzzle}/jawab', [PuzzleController::class, 'jawab'])->name('jawab');
 });
