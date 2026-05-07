@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    $total_siswa = \App\Models\User::where('role', 'siswa')->count();
+    $total_kelas = \App\Models\SubWilayah::count();
+    $total_soal = \App\Models\BankSoal::count();
+    return view('welcome', compact('total_siswa', 'total_kelas', 'total_soal'));
 })->name('/');
 
 Route::get('/dashboard', function () {
@@ -34,8 +37,24 @@ Route::get('/courses', function () {
 })->middleware(['auth', 'verified'])->name('courses');
 
 Route::get('/courses/{id}', function ($id) {
-    return view('courses.show', compact('id'));
+    return view('siswa.courses.show', compact('id'));
 })->middleware(['auth', 'verified'])->name('courses.show');
+
+Route::post('/siswa/join-kelas', function (\Illuminate\Http\Request $request) {
+    $request->validate(['kode_sub_wilayah' => 'required|string']);
+    
+    $subWilayah = \App\Models\SubWilayah::where('kode_sub_wilayah', strtoupper($request->kode_sub_wilayah))->first();
+    
+    if (!$subWilayah) {
+        return back()->with('error', 'Kode kelas tidak ditemukan!');
+    }
+    
+    $user = auth()->user();
+    $user->sub_wilayah_id = $subWilayah->id;
+    $user->save();
+    
+    return redirect()->route('dashboard')->with('success', 'Berhasil bergabung dengan kelas ' . $subWilayah->nama_sub_wilayah);
+})->middleware(['auth', 'verified'])->name('siswa.join_kelas');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

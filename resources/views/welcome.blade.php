@@ -287,12 +287,28 @@
 
                     <div class="anim-fade-4" style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
                         @auth
-                            <a href="{{ route('dashboard') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                🎮 &nbsp;Lanjut Belajar
-                            </a>
-                            <a href="#materi" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: transparent; color: #cbd5e1; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: 1.5px solid rgba(99, 102, 241, 0.3); cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                📚 &nbsp;Lihat Materi
-                            </a>
+                            @if(auth()->user()->role === 'siswa' && is_null(auth()->user()->sub_wilayah_id))
+                                <form action="{{ route('siswa.join_kelas') }}" method="POST" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                    @csrf
+                                    <input type="text" name="kode_sub_wilayah" placeholder="Masukkan Kode Kelas" required 
+                                        style="padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.6); color: white; font-size: 0.95rem; font-family: 'Plus Jakarta Sans', sans-serif; outline: none; transition: border-color 0.2s;"
+                                        onfocus="this.style.borderColor='#8b9cfa'" onblur="this.style.borderColor='rgba(99, 102, 241, 0.4)'"
+                                    >
+                                    <button type="submit" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                        Gabung Kelas
+                                    </button>
+                                    @if(session('error'))
+                                        <div style="color: #ef4444; font-size: 0.85rem; width: 100%;">{{ session('error') }}</div>
+                                    @endif
+                                </form>
+                            @else
+                                <a href="{{ route('dashboard') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                    🎮 &nbsp;Lanjut Belajar
+                                </a>
+                                <a href="#materi" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: transparent; color: #cbd5e1; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: 1.5px solid rgba(99, 102, 241, 0.3); cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                    📚 &nbsp;Lihat Materi
+                                </a>
+                            @endif
                         @else
                             <a href="{{ route('login') }}" class="btn-primary" style="margin-left: 7em; display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
                                 🎮 &nbsp;Mulai Belajar
@@ -302,16 +318,16 @@
 
                     <div class="anim-fade-5" style="display: flex; gap: 36px; margin-top: 52px; padding-top: 28px; border-top: 1px solid rgba(99, 102, 241, 0.12);">
                         <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; color: #6770f3; letter-spacing: -0.02em;">2.4K+</span>
-                            <span style="font-size: 0.78rem; color: #475569; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em;">Siswa Aktif</span>
+                            <span style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; color: #6770f3; letter-spacing: -0.02em;">{{ $total_siswa ?? '0' }}</span>
+                            <span style="font-size: 0.78rem; color: #475569; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em;">Siswa Terdaftar</span>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; color: #6770f3; letter-spacing: -0.02em;">48</span>
-                            <span style="font-size: 0.78rem; color: #475569; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em;">Modul Materi</span>
+                            <span style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; color: #6770f3; letter-spacing: -0.02em;">{{ $total_kelas ?? '0' }}</span>
+                            <span style="font-size: 0.78rem; color: #475569; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em;">Kelas Terdaftar</span>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; color: #6770f3; letter-spacing: -0.02em;">320+</span>
-                            <span style="font-size: 0.78rem; color: #475569; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em;">Tantangan</span>
+                            <span style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; color: #6770f3; letter-spacing: -0.02em;">{{ $total_soal ?? '0' }}</span>
+                            <span style="font-size: 0.78rem; color: #475569; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em;">Soal Latihan</span>
                         </div>
                     </div>
 
