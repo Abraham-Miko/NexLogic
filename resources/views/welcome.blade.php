@@ -472,7 +472,7 @@
                 <div class="footer-grid">
                     {{-- Kolom 1: Logo & Deskripsi --}}
                     <div>
-                        <div style ="margin-left: -6em; margin-bottom: 2rem; transform: scale(2); transform-origin: left center">
+                        <div style ="margin-bottom: 2rem; transform: scale(2); transform-origin: left center">
                             @include('components.application-logo')
                         </div>
 

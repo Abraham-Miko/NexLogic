@@ -97,7 +97,6 @@
             transition: all 0.3s ease-in-out;
         }
 
-
         /* ===================================================
            PENGATURAN STATE: COLLAPSED vs EXPANDED (Penting)
            =================================================== */
@@ -122,7 +121,6 @@
             padding: 6px;
         }
 
-
         /* --- 2. STATE EXPANDED (Sidebar Terbuka) --- */
         .sidebar.expanded .sidebar-toggle-wrapper {
             justify-content: flex-start;
@@ -139,7 +137,6 @@
             display: inline-block;
             opacity: 1;
         }
-
 
         /* ===================================================
            --- WARNA BERBEDA UNTUK TIAP ITEM (Hover & Active) ---
@@ -162,25 +159,7 @@
             border-color: #3b82f6;
         }
 
-
-        /* 2. Dashboard - Neon Purple */
-        .nav-dashboard:hover {
-            background-color: rgba(168, 85, 247, 0.1);
-            border-color: rgba(168, 85, 247, 0.3);
-        }
-        .nav-dashboard.active {
-            background-color: rgba(168, 85, 247, 0.1);
-            color: #a855f7;
-            border-color: rgba(168, 85, 247, 0.3);
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
-        }
-        .nav-dashboard.active::before, .nav-dashboard.active::after {
-            background-color: #a855f7;
-            border-color: #a855f7;
-        }
-
-
-        /* 3. Course - Matrix Green */
+        /* 2. Course - Matrix Green */
         .nav-course:hover {
             background-color: rgba(16, 185, 129, 0.1);
             border-color: rgba(16, 185, 129, 0.3);
@@ -196,8 +175,7 @@
             border-color: #10b981;
         }
 
-
-        /* 4. Puzzle - Lava Orange */
+        /* 3. Puzzle - Lava Orange */
         .nav-puzzle:hover {
             background-color: rgba(249, 115, 22, 0.1);
             border-color: rgba(249, 115, 22, 0.3);
@@ -213,8 +191,7 @@
             border-color: #f97316;
         }
 
-
-        /* 5. Leaderboard - Gold / Yellow */
+        /* 4. Leaderboard - Gold / Yellow */
         .nav-leaderboard:hover {
             background-color: rgba(234, 179, 8, 0.1);
             border-color: rgba(234, 179, 8, 0.3);
@@ -271,18 +248,17 @@
     <div class="sidebar-inner">
 
         {{-- Tombol Toggle Sidebar (Expand/Collapse) --}}
-        <div class="sidebar-toggle-wrapper">
+        <div class="sidebar-toggle-wrapper transition-all duration-300 ease-in-out" :class="sidebarOpen">
             <button class="sidebar-toggle-btn" @click="sidebarOpen = !sidebarOpen" :title="sidebarOpen ? 'Kecilkan Sidebar' : 'Perluas Sidebar'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
                     class="transition-transform duration-300" :class="{ 'rotate-180': !sidebarOpen }">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
                 </svg>
             </button>
         </div>
 
         {{-- Nav items --}}
         <nav class="nav-group">
-            <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
 
             <a href="{{ route('/') }}" class="nav-item nav-home {{ request()->is('/') ? 'active' : '' }}" title="Home Page">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -293,40 +269,12 @@
                 <span class="nav-label">Home Page</span>
             </a>
 
-            <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
-
-            @superadmin
-                <a href="{{ route('superadmin.dashboard') }}" class="nav-item nav-dashboard {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}" title="Dashboard">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                    </svg>
-                    <span class="nav-label">Dashboard</span>
-                </a>
-            @else
-                <a href="{{ route('dashboard') }}" class="nav-item nav-dashboard {{ request()->routeIs('dashboard') ? 'active' : '' }}" title="Dashboard">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                    </svg>
-                    <span class="nav-label">Dashboard</span>
-                </a>
-            @endsuperadmin
-
-            <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
-
             <a href="{{ route('courses') }}" class="nav-item nav-course {{ request()->routeIs('courses*') ? 'active' : '' }}" title="Course">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                 </svg>
                 <span class="nav-label">Course</span>
             </a>
-
-            <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
 
             @php
                 // Cek aktif
@@ -342,21 +290,16 @@
                 <span class="nav-label">Puzzle</span>
             </a>
 
-            <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
-
             <a href="{{ route('leaderboard.index') }}" class="nav-item nav-leaderboard {{ request()->routeIs('leaderboard*') ? 'active' : '' }}" title="Leaderboard">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
                 <span class="nav-label">Leaderboard</span>
             </a>
-
-            <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
         </nav>
 
         {{-- Footer / Profile --}}
         <div class="sidebar-footer">
-            <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
             @auth
             <a href="{{ route('profile.edit') }}" class="nav-item nav-profile {{ request()->routeIs('profile*') ? 'active' : '' }}" title="Profile">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
