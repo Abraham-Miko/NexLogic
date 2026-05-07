@@ -24,9 +24,21 @@ class SubWilayah extends Model
         return $this->belongsTo(User::class, 'guru_id');
     }
 
+    // Relasi ke Guru yang memegang Sub Wilayah ini
+    public function siswa()
+    {
+        return $this->hasMany(User::class, 'sub_wilayah_id')->where('role', 'siswa');
+    }
+
     // Relasi 1 Kelas punya Banyak Siswa
     public function users()
     {
         return $this->hasMany(User::class, 'sub_wilayah_id');
+    }
+
+    // Relasi ke Bank Soal
+    public function bankSoal()
+    {
+        return $this->hasMany(BankSoal::class, 'sub_wilayah_id');
     }
 }

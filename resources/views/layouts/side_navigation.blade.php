@@ -295,19 +295,31 @@
 
             <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
 
-            <a href="{{ route('dashboard') }}" class="nav-item nav-dashboard {{ request()->routeIs('dashboard') ? 'active' : '' }}" title="Dashboard">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                    <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                    <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
-                </svg>
-                <span class="nav-label">Dashboard</span>
-            </a>
+            @superadmin
+                <a href="{{ route('superadmin.dashboard') }}" class="nav-item nav-dashboard {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}" title="Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+            @else
+                <a href="{{ route('dashboard') }}" class="nav-item nav-dashboard {{ request()->routeIs('dashboard') ? 'active' : '' }}" title="Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+            @endsuperadmin
 
             <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
 
-            <a href="" class="nav-item nav-course {{ request()->routeIs('materi*') ? 'active' : '' }}" title="Course">
+            <a href="{{ route('courses') }}" class="nav-item nav-course {{ request()->routeIs('courses*') ? 'active' : '' }}" title="Course">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                 </svg>
@@ -316,7 +328,14 @@
 
             <hr style="opacity: 0.1; margin: 8px 0; border-color: #334155;">
 
-            <a href="" class="nav-item nav-puzzle {{ request()->routeIs('tantangan*') ? 'active' : '' }}" title="Puzzle">
+            @php
+                // Cek aktif
+                $isActive = request()->routeIs('puzzle.*');
+            @endphp
+
+            <a href="{{ route('puzzle.index') }}"
+            class="nav-item nav-puzzle {{ $isActive ? 'active' : '' }}"
+            title="Puzzle">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
                 </svg>

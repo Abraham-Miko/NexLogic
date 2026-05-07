@@ -3,16 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\SubWilayah;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SiswaTemplateExport;
-use App\Models\SubWilayah;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+
 
 class User extends Authenticatable
 {
@@ -64,10 +67,31 @@ class User extends Authenticatable
 
     }
 
+    public function penilaians()
+    {
+        return $this->hasMany(\App\Models\Penilaian::class, 'siswa_id');
+    }
+
+    public function kelasYangDiampu()
+    {
+        return $this->hasMany(SubWilayah::class, 'guru_id');
+    }
+
+    public function wilayahYangDitempati()
+    {
+        // Menggunakan belongsToMany karena lewat tabel pivot guru_wilayah
+        return $this->belongsToMany(Wilayah::class, 'guru_wilayah', 'guru_id', 'wilayah_id');
+    }
+
     public function wilayahs(){
 
         return $this->belongsToMany(Wilayah::class, 'guru_wilayah', 'guru_id', 'wilayah_id');
 
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
     }
 
     protected function avatarUrl(): Attribute
@@ -76,4 +100,11 @@ class User extends Authenticatable
             get: fn () => 'https://ui-avatars.com/api/?name=' . urlencode($this->nama) . '&background=random&color=fff'
         );
     }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+        // Sesuaikan logic ini dengan struktur database Anda (misal: $this->role_id atau kolom lainnya)
+    }
+
 }
