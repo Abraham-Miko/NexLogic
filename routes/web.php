@@ -35,8 +35,8 @@ Route::get('/dashboard', function () {
 
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard', [DashboardController::class, 'indexSiswa'])->name('dashboard');
-Route::get('/courses', [PuzzleController::class, 'courses'])->name('courses');
+Route::get('/dashboard', [DashboardController::class, 'indexSiswa'])->name('dashboard')->middleware('auth');
+Route::get('/courses', [PuzzleController::class, 'courses'])->name('courses')->middleware('auth');
 
 Route::get('/courses/{id}', function ($id) {
     $user = auth()->user();
