@@ -25,34 +25,144 @@ Route::get('/dashboard', function () {
     if ($role === 'super_admin') {
         // Arahkan ke rute khusus super admin
         return redirect()->route('superadmin.dashboard');
+    } else if($role === 'guru') {
+        return redirect()->route('guru.dashboard');
     }
 
     // Jika user biasa, tampilkan view dashboard biasa
-    return view('dashboard');
+    return redirect()->route('dashboard');
 
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/courses', function () {
-    return view('courses');
-})->middleware(['auth', 'verified'])->name('courses');
+Route::get('/dashboard', [DashboardController::class, 'indexSiswa'])->name('dashboard');
+Route::get('/courses', [PuzzleController::class, 'courses'])->name('courses');
 
 Route::get('/courses/{id}', function ($id) {
-    return view('siswa.courses.show', compact('id'));
+    $user = auth()->user();
+    $subWilayahId = $user->sub_wilayah_id;
+
+    // Ambil bank soal pre-test dan post-test untuk materi ini
+    $preTestQuestions = \App\Models\BankSoal::where('sub_wilayah_id', $subWilayahId)
+                                           ->where('materi_ke', $id)
+                                           ->where('jenis_soal', 'pre_test')
+                                           ->get();
+
+    $postTestQuestions = \App\Models\BankSoal::where('sub_wilayah_id', $subWilayahId)
+                                            ->where('materi_ke', $id)
+                                            ->where('jenis_soal', 'post_test')
+                                            ->get();
+
+    // 1. Map JUDUL materi
+    $judulMap = [
+        1 => 'Variabel & Tipe Data',
+        2 => 'Operator & Ekspresi',
+        3 => 'Input & Output',
+        4 => 'Percabangan (If/Else)',
+        5 => 'Perulangan (Looping)',
+        6 => 'Fungsi & Parameter'
+    ];
+
+    // Map judul materi ke array sub-topik
+    $topicsMap = [
+        1 => ['Pengenalan Variabel', 'Tipe Data Dasar', 'Cara Deklarasi', 'Contoh Penggunaan'],
+        2 => ['Operator Aritmatika', 'Operator Logika', 'Operator Perbandingan'],
+        3 => ['Menampilkan Teks ke Layar', 'Menerima Input Pengguna', 'Format Penggabungan Teks'],
+        4 => ['Percabangan If', 'If-Else', 'Nested If'],
+        5 => ['Perulangan For', 'Perulangan While', 'Break & Continue'],
+        6 => ['Pengenalan Fungsi', 'Parameter', 'Return Value']
+    ];
+
+    $judul_materi = $judulMap[$id] ?? 'Materi ' . $id;
+    $materiTopics = $topicsMap[$id] ?? ['Sub-Topik 1', 'Sub-Topik 2'];
+
+    // Cek status pengerjaan kuis siswa
+    $penilaian = \App\Models\Penilaian::where('siswa_id', $user->id)
+                                      ->where('sub_wilayah_id', $subWilayahId)
+                                      ->where('materi_ke', $id)
+                                      ->first();
+
+    $skorPre = $penilaian ? $penilaian->skor_pre : null;
+    $skorPost = $penilaian ? $penilaian->skor_post : null;
+
+    return view('siswa.courses.show', compact('id', 'preTestQuestions', 'postTestQuestions', 'materiTopics', 'skorPre', 'skorPost', 'judul_materi'));
 })->middleware(['auth', 'verified'])->name('courses.show');
+
+Route::post('/courses/{id}/submit-test', function (\Illuminate\Http\Request $request, $id) {
+    $user = auth()->user();
+    $subWilayahId = $user->sub_wilayah_id;
+    $type = $request->input('type'); // 'pre_test' atau 'post_test'
+    $answers = $request->input('answers', []);
+
+    // Cek apakah sudah pernah mengerjakan
+    $penilaian = \App\Models\Penilaian::where('siswa_id', $user->id)
+                                      ->where('sub_wilayah_id', $subWilayahId)
+                                      ->where('materi_ke', $id)
+                                      ->first();
+
+    if ($penilaian) {
+        if ($type === 'pre_test' && !is_null($penilaian->skor_pre)) {
+            return response()->json(['error' => 'Anda sudah mengerjakan pre-test ini.'], 403);
+        }
+        if ($type === 'post_test' && !is_null($penilaian->skor_post)) {
+            return response()->json(['error' => 'Anda sudah mengerjakan post-test ini.'], 403);
+        }
+    }
+
+    // Ambil soal
+    $questions = \App\Models\BankSoal::where('sub_wilayah_id', $subWilayahId)
+                                     ->where('materi_ke', $id)
+                                     ->where('jenis_soal', $type)
+                                     ->get();
+
+    if ($questions->isEmpty()) {
+        return response()->json(['error' => 'Soal tidak ditemukan.'], 404);
+    }
+
+    $correctCount = 0;
+    foreach ($questions as $q) {
+        $userAnswer = $answers[$q->id] ?? null;
+        if ($userAnswer === $q->jawaban_benar) {
+            $correctCount++;
+        }
+    }
+
+    $score = round(($correctCount / $questions->count()) * 100);
+
+    // Simpan ke penilaian
+    if (!$penilaian) {
+        $penilaian = new \App\Models\Penilaian();
+        $penilaian->siswa_id = $user->id;
+        $penilaian->sub_wilayah_id = $subWilayahId;
+        $penilaian->materi_ke = $id;
+    }
+
+    if ($type === 'pre_test') {
+        $penilaian->skor_pre = $score;
+    } else {
+        $penilaian->skor_post = $score;
+    }
+
+    $penilaian->save();
+
+    return response()->json([
+        'success' => true,
+        'score' => $score
+    ]);
+})->middleware(['auth', 'verified'])->name('courses.submit_test');
 
 Route::post('/siswa/join-kelas', function (\Illuminate\Http\Request $request) {
     $request->validate(['kode_sub_wilayah' => 'required|string']);
-    
+
     $subWilayah = \App\Models\SubWilayah::where('kode_sub_wilayah', strtoupper($request->kode_sub_wilayah))->first();
-    
+
     if (!$subWilayah) {
         return back()->with('error', 'Kode kelas tidak ditemukan!');
     }
-    
+
     $user = auth()->user();
     $user->sub_wilayah_id = $subWilayah->id;
     $user->save();
-    
+
     return redirect()->route('dashboard')->with('success', 'Berhasil bergabung dengan kelas ' . $subWilayah->nama_sub_wilayah);
 })->middleware(['auth', 'verified'])->name('siswa.join_kelas');
 
@@ -131,19 +241,19 @@ Route::middleware('auth')->group(function () {
 });
 // --- Route Fitur Puzzle (NexLogic - Siswa/Umum) ---
 Route::middleware(['auth', 'verified'])->prefix('puzzle')->name('puzzle.')->group(function () {
-    Route::get('/', function() { 
+    Route::get('/', function() {
         $user_id = auth()->id();
         $total_skor = \App\Models\Penilaian::totalSkorPuzzle($user_id);
-        
+
         $penilaian = \App\Models\Penilaian::where('siswa_id', $user_id)->get();
         $completed_materi = $penilaian->whereNotNull('skor_puzzle')->pluck('materi_ke')->toArray();
         $unlocked_materi = $penilaian->whereNotNull('skor_pre')->whereNotNull('skor_post')->pluck('materi_ke')->toArray();
 
-        return view('siswa.puzzle.index', compact('total_skor', 'completed_materi', 'unlocked_materi')); 
+        return view('siswa.puzzle.index', compact('total_skor', 'completed_materi', 'unlocked_materi'));
     })->name('index');
 
-    Route::get('/materi/{id}', function($id) { 
-        return view('siswa.puzzle.puzzle_materi' . $id, ['materi_id' => $id]); 
+    Route::get('/materi/{id}', function($id) {
+        return view('siswa.puzzle.puzzle_materi' . $id, ['materi_id' => $id]);
     })->name('materi.show');
 
     Route::post('/materi/{id}/submit', function (\Illuminate\Http\Request $request, $id) {
@@ -175,4 +285,4 @@ Route::middleware(['auth', 'verified', 'role:super_admin'])->prefix('superadmin/
     Route::delete('/{puzzle}', [SuperAdminPuzzleController::class, 'destroy'])->name('destroy');
 });
 
-require __DIR__.'/auth.php';    
+require __DIR__.'/auth.php';

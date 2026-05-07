@@ -65,74 +65,72 @@ class DashboardController extends Controller {
         ));
     }
 
-    // public function indexGuru() {
-    //     $totalSiswa = User::where('role', 'siswa')->where('status', 'aktif')->count();
-    //     $totalGuru = User::where('role', 'guru')->where('status', 'aktif')->count();
-    //     $totalWilayah = Wilayah::count();
-    //     $totalKelas = SubWilayah::count();
-    //     $siswaLaki = User::where('role', 'siswa')->where('status', 'aktif')->where('jenis_kelamin', 'L')->count();
-    //     $siswaPerempuan = User::where('role', 'siswa')->where('status', 'aktif')->where('jenis_kelamin', 'P')->count();
+// app/Http/Controllers/DashboardController.php
 
-    //     // Khusus Guru
-    //     $user = Auth::user();
-    //     // Cek apakah guru punya wilayah
-    //     $punyaWilayah = $user->wilayahYangDitempati()->exists();
-    //     // Cek apakah guru punya sub wilayah (kelas)
-    //     $punyaKelas = $user->kelasYangDiampu()->exists();
-    //     // Ambil data untuk jaga-jaga jika ingin ditampilkan
-    //     $daftarWilayah = $user->wilayahYangDitempati()->get();
-    //     $kelasDikelompokkan = $user->kelasYangDiampu()
-    //                             ->with('wilayah')
-    //                             ->get()
-    //                             ->groupBy('wilayah.nama_wilayah');
-    //     $distribusiKelas = \Illuminate\Support\Facades\DB::table('sub_wilayah')
-    //         ->leftJoin('wilayah', 'sub_wilayah.wilayah_id', '=', 'wilayah.id')
-    //         ->leftJoin('users', function($join) {
-    //             $join->on('sub_wilayah.id', '=', 'users.sub_wilayah_id')
-    //                  ->where('users.role', '=', 'siswa')
-    //                  ->where('users.status', '=', 'aktif');
-    //         })
-    //         ->select(
-    //             'sub_wilayah.id',
-    //             'sub_wilayah.nama_sub_wilayah',
-    //             'wilayah.nama_wilayah',
-    //             \Illuminate\Support\Facades\DB::raw('count(users.id) as total_siswa')
-    //         )
-    //         ->groupBy('sub_wilayah.id', 'sub_wilayah.nama_sub_wilayah', 'wilayah.nama_wilayah')
-    //         ->get();
-    //     $labelKelas = $distribusiKelas->map(function ($item) {
-    //         $namaWilayah = $item->nama_wilayah ? $item->nama_wilayah : 'Tanpa Wilayah';
-    //         return [
-    //             $item->nama_sub_wilayah, // Baris atas: X-RPL
-    //             $namaWilayah             // Baris bawah: Angkatan 2026
-    //         ];
+    public function indexSiswa() {
+        $user = auth()->user();
 
-    //     })->toArray();
-    //     $dataSiswaKelas = $distribusiKelas->pluck('total_siswa');
+        // Redirect jika bukan siswa
+        if ($user->role === 'super_admin') return redirect()->route('superadmin.dashboard');
+        if ($user->role === 'guru') return redirect()->route('guru.dashboard');
 
-    //     $siswaTanpaKelas = User::where('role', 'siswa')
-    //                            ->where('status', 'aktif')
-    //                            ->whereNull('sub_wilayah_id')
-    //                            ->count();
+        $siswa = $user;
+        $subWilayah = $siswa->subWilayah; // Mengambil data kelas/wilayah
 
-    //     $kelasTanpaWali = SubWilayah::whereNull('guru_id')->count();
+        // 1. Ambil Status Aktivasi Materi dari Tabel Sub Wilayah
+        $statusMateri = [
+            1 => (bool) ($subWilayah->materi_1_aktif ?? false),
+            2 => (bool) ($subWilayah->materi_2_aktif ?? false),
+            3 => (bool) ($subWilayah->materi_3_aktif ?? false),
+            4 => (bool) ($subWilayah->materi_4_aktif ?? false),
+            5 => (bool) ($subWilayah->materi_5_aktif ?? false),
+            6 => (bool) ($subWilayah->materi_6_aktif ?? false),
+        ];
 
-    //     // Kirim semua data ke view dashboard
-    //     return view('guru.dashboard', compact(
-    //         'totalSiswa',
-    //         'totalGuru',
-    //         'totalWilayah',
-    //         'totalKelas',
-    //         'siswaTanpaKelas',
-    //         'kelasTanpaWali',
-    //         'siswaLaki',
-    //         'siswaPerempuan',
-    //         'labelKelas',
-    //         'dataSiswaKelas',
-    //         'punyaWilayah',
-    //         'punyaKelas',
-    //         'daftarWilayah',
-    //         'kelasDikelompokkan'
-    //     ));
-    // }
+        // 2. Hitung Progress & Total XP
+        $progressMateri = [];
+        $totalProgressValue = 0;
+        $totalXP = 0;
+
+        for ($i = 1; $i <= 6; $i++) {
+            $penilaian = \App\Models\Penilaian::where('siswa_id', $user->id)
+                ->where('materi_ke', $i)
+                ->first();
+
+            if ($penilaian) {
+                // Hitung XP (Skor Post Test + Skor Puzzle)
+                $totalXP += ($penilaian->skor_puzzle ?? 0);
+
+                // Logika Progress Sesuai Kesepakatan
+                if (!is_null($penilaian->skor_post)) {
+                    $progressMateri[$i] = 100;
+                } elseif (!is_null($penilaian->skor_pre)) {
+                    $progressMateri[$i] = 40;
+                } else {
+                    $progressMateri[$i] = 0;
+                }
+            } else {
+                $progressMateri[$i] = 0;
+            }
+            $totalProgressValue += $progressMateri[$i];
+        }
+
+        // Rata-rata progress keseluruhan
+        $overallProgress = round($totalProgressValue / 6);
+
+        // Data Statis Judul Materi
+        $materis = [
+            1 => ['judul' => 'Variabel & Tipe Data', 'level' => 'Beginner'],
+            2 => ['judul' => 'Operator & Ekspresi', 'level' => 'Beginner'],
+            3 => ['judul' => 'Input & Output', 'level' => 'Amateur'],
+            4 => ['judul' => 'Percabangan (if/else)', 'level' => 'Amateur'],
+            5 => ['judul' => 'Perulangan (for & while)', 'level' => 'Pro'],
+            6 => ['judul' => 'Fungsi & Parameter', 'level' => 'Pro'],
+        ];
+
+        return view('dashboard', compact(
+            'user', 'subWilayah', 'statusMateri',
+            'progressMateri', 'overallProgress', 'totalXP', 'materis'
+        ));
+    }
 }
