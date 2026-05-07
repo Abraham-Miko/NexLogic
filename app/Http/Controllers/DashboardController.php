@@ -77,6 +77,22 @@ class DashboardController extends Controller {
         $siswa = $user;
         $subWilayah = $siswa->subWilayah; // Mengambil data kelas/wilayah
 
+        // 1. Ambil semua siswa di sub-wilayah yang sama untuk perhitungan ranking
+        $rankingSiswa = \App\Models\User::where('sub_wilayah_id', $siswa->sub_wilayah_id)
+        ->where('role', 'siswa')
+        ->get()
+        ->map(function($s) {
+            return [
+                'id' => $s->id,
+                'total_poin' => \App\Models\Penilaian::where('siswa_id', $s->id)->sum('skor_puzzle')
+            ];
+        })
+        ->sortByDesc('total_poin')
+        ->values();
+
+        $userRank = $rankingSiswa->search(function($item) use ($user) {
+            return $item['id'] === $user->id;
+        }) + 1;
         // 1. Ambil Status Aktivasi Materi dari Tabel Sub Wilayah
         $statusMateri = [
             1 => (bool) ($subWilayah->materi_1_aktif ?? false),
@@ -130,7 +146,7 @@ class DashboardController extends Controller {
 
         return view('dashboard', compact(
             'user', 'subWilayah', 'statusMateri',
-            'progressMateri', 'overallProgress', 'totalXP', 'materis'
+            'progressMateri', 'overallProgress', 'totalXP', 'materis', 'userRank'
         ));
     }
 }

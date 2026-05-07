@@ -9,7 +9,6 @@ use App\Http\Controllers\SuperAdminPuzzleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\WilayahController;
-use App\Http\Controllers\SubWilayahController;
 use App\Http\Controllers\LeaderboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -67,10 +66,10 @@ Route::get('/courses/{id}', function ($id) {
     // Map judul materi ke array sub-topik
     $topicsMap = [
         1 => ['Pengenalan Variabel', 'Tipe Data Dasar', 'Cara Deklarasi', 'Contoh Penggunaan'],
-        2 => ['Operator Aritmatika', 'Operator Logika', 'Operator Perbandingan'],
-        3 => ['Menampilkan Teks ke Layar', 'Menerima Input Pengguna', 'Format Penggabungan Teks'],
-        4 => ['Percabangan If', 'If-Else', 'Nested If'],
-        5 => ['Perulangan For', 'Perulangan While', 'Break & Continue'],
+        2 => ['Pengertian Operator', 'Operator Matematika', 'Operator Logika', 'Operator Perbandingan'],
+        3 => ['Pengertian I/O', 'Menampilkan Teks ke Layar', 'Menerima Input Pengguna', 'Format Penggabungan Teks'],
+        4 => ['Pengertian If', 'Percabangan If', 'If-Else', 'Nested If'],
+        5 => ['Pengertian Perulangan', 'Perulangan For', 'Perulangan While', 'Break & Continue'],
         6 => ['Pengenalan Fungsi', 'Parameter', 'Return Value']
     ];
 

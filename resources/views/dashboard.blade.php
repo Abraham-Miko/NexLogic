@@ -104,7 +104,7 @@
             </div>
             <div class="stat-card">
                 <span style="color: #94a3b8;">Peringkat Kelas</span>
-                <div class="stat-value">#1</div> </div>
+                <div class="stat-value">#{{ $userRank }}</div> </div>
         </div>
 
         <div class="materi-list">

@@ -2,13 +2,11 @@
 <aside class="w-72 bg-[#111827] border-r border-slate-700 flex flex-col justify-between py-6 px-4 shrink-0 min-h-screen">
     <div>
         <!-- Logo -->
-        <div class="flex items-center gap-3 px-4 mb-10">
-            <div class="w-10 h-10 bg-gray-200 rounded-full shrink-0"></div>
-            <div>
-                <p class="text-xs text-gray-400 leading-tight">Guru</p>
-                <h1 class="text-2xl font-bold text-white tracking-wide font-heading">NexLogic</h1>
+        <a href="{{ route('/') }}" class="ml-12 mb-10 block">
+            <div class="w-32 h-auto mb-8">
+                @include('components.application-logo')
             </div>
-        </div>
+        </a>
 
         <!-- Navigation -->
         <nav class="space-y-1">
@@ -78,14 +76,27 @@
     </div>
 
     <!-- User Profile Footer -->
-    <div class="flex items-center gap-3 px-4">
-        <!-- Mengambil Inisial Nama (Misal: Abraham = A) -->
-        <div class="w-8 h-8 rounded-full bg-[#4c489d] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-[0_0_10px_rgba(76,72,157,0.5)]">
-            {{ substr(Auth::user()->nama, 0, 1) }}
+    <div class="w-full">
+        <hr class="border-slate-700 mb-4 mx-4">
+
+        <div class="flex items-center gap-3 px-4 mb-4">
+            <div class="w-8 h-8 rounded-full bg-[#4c489d] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-[0_0_10px_rgba(76,72,157,0.5)]">
+                {{ substr(Auth::user()->nama, 0, 1) }}
+            </div>
+            <div class="truncate">
+                <p class="font-medium text-white truncate text-sm">{{ Auth::user()->nama }}</p>
+                <p class="text-xs text-gray-400">Guru</p>
+            </div>
         </div>
-        <div class="truncate">
-            <p class="font-medium text-white truncate text-sm">{{ Auth::user()->nama }}</p>
-            <p class="text-xs text-gray-400">Guru</p>
-        </div>
+
+        <form method="POST" action="{{ route('logout') }}" class="px-2">
+            @csrf
+            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition border border-transparent text-gray-400 hover:text-red-400 hover:bg-red-500/10">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                <span class="font-medium">Logout</span>
+            </button>
+        </form>
     </div>
 </aside>
