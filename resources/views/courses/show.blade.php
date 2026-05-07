@@ -247,6 +247,38 @@
             margin-bottom: 20px;
             font-size: 0.95rem;
         }
+        
+        .mcq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .mcq-btn {
+            background-color: transparent;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: #e2e8f0;
+            font-family: inherit;
+            font-size: 0.95rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .mcq-btn:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+            border-color: var(--purple-neon);
+        }
+
+        .mcq-btn.selected {
+            background-color: rgba(168, 85, 247, 0.2);
+            border-color: var(--purple-neon);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+        }
 
         .code-block {
             background-color: #030712;
@@ -512,18 +544,51 @@
                     
                     <h1 class="content-title" x-text="activeTopicName">Lorem ipsum</h1>
                     
-                    <div class="quiz-box">
-                        <h2>Soal <span x-text="currentStep">1</span></h2>
-                        
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                        
-                        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 12px;">Lorem ipsum dolor sit amet</p>
-                        
+                    <!-- Pretest / Posttest View (10 Questions) -->
+                    <div x-show="currentStep === 0 || currentStep === 6" style="display: flex; flex-direction: column; gap: 64px; padding-bottom: 40px; display: none;" x-effect="$el.style.display = (currentStep === 0 || currentStep === 6) ? 'flex' : 'none'">
+                        <template x-for="q in 10" :key="q">
+                            <div class="quiz-box">
+                                <h2>Soal <span x-text="q"></span></h2>
+                                
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                
+                                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 12px;">Lorem ipsum dolor sit amet</p>
+                                
+                                <div class="code-block">
+                                    print("Hello, World!")
+                                </div>
+                                
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                                
+                                <div class="mcq-grid">
+                                    <!-- Simple static options for demo, usually would use dynamic data -->
+                                    <button class="mcq-btn">A. Lorem ipsum dolor sit amet</button>
+                                    <button class="mcq-btn">B. Lorem ipsum dolor sit amet</button>
+                                    <button class="mcq-btn">C. Lorem ipsum dolor sit amet</button>
+                                    <button class="mcq-btn">D. Lorem ipsum dolor sit amet</button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Materi Text View -->
+                    <div x-show="currentStep >= 1 && currentStep <= 5" style="padding-bottom: 40px; display: none;" x-effect="$el.style.display = (currentStep >= 1 && currentStep <= 5) ? 'block' : 'none'">
+                        <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 24px;">
+                            Ini adalah konten artikel materi teks biasa untuk topik <strong x-text="activeTopicName" style="color: #fff;"></strong>. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl. Sed vel felis felis. Sed non mi vitae mi pulvinar ultrices.
+                        </p>
+                        <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 24px;">
+                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris interdum facilisis convallis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed laoreet dui id est accumsan, at faucibus lectus bibendum.
+                        </p>
                         <div class="code-block">
-                            print("Hello, World!")
+                            // Contoh snippet materi<br>
+                            let greeting = "Belajar di NexLogic";<br>
+                            console.log(greeting);
                         </div>
-                        
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                        <p style="color: #cbd5e1; line-height: 1.8;">
+                            Silakan lanjutkan membaca atau tekan Next untuk menuju ke langkah berikutnya.
+                        </p>
+                    </div>
+
                 </div>
             </main>
 
@@ -573,12 +638,33 @@
                     </div>
                     <div class="accordion-body">
                         <ul class="topic-list">
+                            <!-- Pretest -->
+                            <li class="topic-item" :class="{ 'active': currentStep === 0 }" @click="selectStep(0, 'Pretest')">
+                                <div class="topic-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </div>
+                                <span>Pretest</span>
+                            </li>
+                            
+                            <!-- Materi Utama -->
                             <template x-for="i in 5" :key="i">
                                 <li class="topic-item" :class="{ 'active': currentStep === i }" @click="selectStep(i, 'Mengenal Variabel ' + i)">
                                     <div class="topic-circle" x-text="i"></div>
                                     <span x-text="'Mengenal Variabel ' + i"></span>
                                 </li>
                             </template>
+
+                            <!-- Posttest -->
+                            <li class="topic-item" :class="{ 'active': currentStep === 6 }" @click="selectStep(6, 'Posttest')">
+                                <div class="topic-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <span>Posttest</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -617,6 +703,8 @@
         </aside>
     </div>
     
+
+
     <!-- Floating Hamburger Icon (Tampil saat Right Sidebar ditutup) -->
     <button class="floating-hamburger" @click="toggleRightSidebar" x-show="!rightSidebarOpen" x-transition>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -630,9 +718,8 @@
                 sidebarOpen: false, // Untuk Left Sidebar (Official NexLogic)
                 rightSidebarOpen: true, // Untuk Right Sidebar (Daftar Puzzle)
                 openSection: 1,
-                currentStep: 1,
-                activeTopicName: 'Mengenal Variabel 1',
-                selectedOption: null,
+                currentStep: 0, // Mulai dari Pretest
+                activeTopicName: 'Pretest',
 
                 toggleRightSidebar() {
                     this.rightSidebarOpen = !this.rightSidebarOpen;
@@ -640,24 +727,33 @@
                 
                 selectStep(step, name) {
                     this.currentStep = step;
-                    this.activeTopicName = name;
-                    this.selectedOption = null;
+                    this.updateTopicName();
                 },
 
                 nextStep() {
-                    if (this.currentStep < 5) {
+                    if (this.currentStep < 6) {
                         this.currentStep++;
-                        this.activeTopicName = 'Mengenal Variabel ' + this.currentStep;
-                        this.selectedOption = null;
+                        this.updateTopicName();
                     }
                 },
 
                 prevStep() {
-                    if (this.currentStep > 1) {
+                    if (this.currentStep > 0) {
                         this.currentStep--;
-                        this.activeTopicName = 'Mengenal Variabel ' + this.currentStep;
-                        this.selectedOption = null;
+                        this.updateTopicName();
                     }
+                },
+                
+                updateTopicName() {
+                    if (this.currentStep === 0) {
+                        this.activeTopicName = 'Pretest';
+                    } else if (this.currentStep === 6) {
+                        this.activeTopicName = 'Posttest';
+                    } else {
+                        this.activeTopicName = 'Mengenal Variabel ' + this.currentStep;
+                    }
+                    // Scroll to top of content
+                    document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
                 }
             }))
         })
