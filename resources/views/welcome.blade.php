@@ -180,7 +180,7 @@
             background: rgba(70, 58, 237, 0.05);
             transition: all 0.2s ease;
         }
-        
+
         .course-badge:hover {
             border-color: rgba(34, 211, 238, 0.5);
             color: #22d3ee;
@@ -272,17 +272,17 @@
                 <div class="hero-content" style="position: relative; z-index: 1; padding: 60px 60px 60px 72px; max-width: 760px;">
 
                     <div class="anim-fade-1" style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 18px; border-radius: 100px; background: rgba(70, 58, 237, 0.12); border: 1px solid rgba(58, 70, 237, 0.35); color: #8b9cfa; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 28px; font-family: 'JetBrains Mono', monospace;">
-                        🚀&nbsp; Platform Belajar Coding #1 untuk SMA/K
+                        🚀&nbsp; MODUL PEMBELAJARAN INFORMATIKA EKSKLUSIF
                     </div>
 
                     <h1 class="anim-fade-2" style="font-family: 'Orbitron', sans-serif; font-size: clamp(2.6rem, 5.5vw, 4rem); font-weight: 900; line-height: 1.1; color: #fff; margin: 0 0 20px; letter-spacing: -0.01em;">
-                        Belajar <span style="background: linear-gradient(135deg, #a09eec 0%, #5867ee 50%, #3d14f0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Coding,</span><br>
-                        Naik Level!
+                        Asah <span style="background: linear-gradient(135deg, #a09eec 0%, #5867ee 50%, #3d14f0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Logikanya,</span><br>
+                        Kuasai Kodenya!
                     </h1>
 
                     <p class="anim-fade-3" style="font-size: 1rem; color: #64748b; line-height: 1.7; max-width: 480px; margin-bottom: 40px;">
-                        Kuasai dasar pemrograman dengan cara yang seru dan interaktif.
-                        Kerjakan tantangan, kumpulkan XP, dan jadilah programmer handal!
+                        Platform e-learning khusus untuk melatih nalar dan algoritma dasar pemrograman.
+                        Pahami konsepnya dari nol, selesaikan tantangan logika, dan bersainglah di papan peringkat kelasmu!
                     </p>
 
                     <div class="anim-fade-4" style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
@@ -290,7 +290,7 @@
                             @if(auth()->user()->role === 'siswa' && is_null(auth()->user()->sub_wilayah_id))
                                 <form action="{{ route('siswa.join_kelas') }}" method="POST" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                                     @csrf
-                                    <input type="text" name="kode_sub_wilayah" placeholder="Masukkan Kode Kelas" required 
+                                    <input type="text" name="kode_sub_wilayah" placeholder="Masukkan Kode Kelas" required
                                         style="padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.6); color: white; font-size: 0.95rem; font-family: 'Plus Jakarta Sans', sans-serif; outline: none; transition: border-color 0.2s;"
                                         onfocus="this.style.borderColor='#8b9cfa'" onblur="this.style.borderColor='rgba(99, 102, 241, 0.4)'"
                                     >
@@ -399,21 +399,21 @@
 
             {{-- SECTION: MATERI --}}
             <section class="features-section" id="materi" style="margin-top: 4em;">
-                
+
                 <h2 class="section-title" style="margin-bottom: 24px;">Bahasa yang Akan Dipelajari</h2>
-                
+
                 <div class="course-main-card">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 16px;">
-                        <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; color: #fff; font-weight: 700; margin: 0;">Python</h3>
+                        <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; color: #fff; font-weight: 700; margin: 0;">C++</h3>
                         <div style="display: flex; gap: 8px;">
                             <span class="course-badge">Beginner</span>
                             <span class="course-badge">Amateur</span>
                             <span class="course-badge">Pro</span>
                         </div>
                     </div>
-                    <h4 style="color: #e2e8f0; font-size: 1.1rem; font-weight: 500; margin-bottom: 8px;">Apa itu Python?</h4>
+                    <h4 style="color: #e2e8f0; font-size: 1.1rem; font-weight: 500; margin-bottom: 8px;">Apa itu C++?</h4>
                     <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6; max-width: 900px;">
-                        Python adalah bahasa pemrograman tingkat tinggi, interpretatif, dan serbaguna (general-purpose) yang populer karena sintaksnya sederhana dan mudah dibaca, mirip bahasa Inggris.
+                        C++ adalah bahasa pemrograman tangguh yang sangat cocok untuk melatih nalar dan algoritma dasar komputer. Dengan mempelajari C++, kamu tidak hanya belajar menulis kode, tetapi memahami bagaimana komputer berpikir dari akarnya. Bahasa ini akan membangun fondasi logikamu menjadi sangat kuat, sehingga ke depannya kamu akan mudah menguasai bahasa pemrograman apa pun!
                     </p>
                 </div>
 
@@ -422,36 +422,40 @@
                 <div class="features-grid" style="margin-bottom: 20px;">
                     <div class="feature-card">
                         <h3 class="feature-heading">Variabel & Tipe Data</h3>
-                        <p class="feature-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <p class="feature-desc">Pelajari cara program komputer "mengingat" sebuah informasi. Mulai dari menyimpan teks, angka bulat, hingga bilangan desimal ke dalam memori.</p>
                     </div>
                     <div class="feature-card">
                         <h3 class="feature-heading">Operator Matematika</h3>
-                        <p class="feature-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <p class="feature-desc">Pahami bagaimana komputer melakukan perhitungan matematika dan perbandingan logika untuk mengolah data mentah menjadi informasi yang berguna.</p>
                     </div>
                     <div class="feature-card">
-                        <h3 class="feature-heading">Percabangan If/Else</h3>
-                        <p class="feature-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <h3 class="feature-heading">Input / Output</h3>
+                        <p class="feature-desc">Buat programmu menjadi interaktif! Pelajari cara menampilkan teks ke layar terminal dan menerima ketikan langsung dari pengguna.</p>
                     </div>
                 </div>
 
-                <div class="features-grid grid-2-centered">
+                <div class="features-grid grid-3-centered">
+                    <div class="feature-card">
+                        <h3 class="feature-heading">Percabangan If/Else</h3>
+                        <p class="feature-desc">Latih program buatanmu agar bisa "berpikir" dan mengambil keputusan atau rute jalan sendiri berdasarkan kondisi yang kamu tentukan.</p>
+                    </div>
                     <div class="feature-card">
                         <h3 class="feature-heading">Perulangan For & While</h3>
-                        <p class="feature-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <p class="feature-desc">Buat komputer melakukan tugas yang melelahkan secara otomatis. Pelajari cara mengulang proses ratusan kali tanpa harus menulis kode berkali-kali.</p>
                     </div>
                     <div class="feature-card">
                         <h3 class="feature-heading">Fungsi & Parameter</h3>
-                        <p class="feature-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <p class="feature-desc">Naik ke level pro! Bungkus rentetan kodinganmu menjadi sebuah "mesin mini" yang rapi, terstruktur, dan dapat digunakan ulang kapan saja.</p>
                     </div>
                 </div>
-                
+
             </section>
 
             {{-- SECTION: PROMOTION / CALL TO ACTION --}}
             <section class="features-section" id="Promotion" style="text-align: center; margin-top: 4em">
                 <h2 class="section-title">Siap Jadi Programmer?</h2>
                 <p class="promotion-text">
-                    Bergabung dengan ribuan siswa SMA yang sudah memulai perjalanan coding mereka.</p>
+                    Bergabung dengan ribuan siswa yang sudah memulai perjalanan coding mereka.</p>
 
                 @auth
                     <a href="{{ route('dashboard') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: #fff; font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 0 24px rgba(124, 58, 237, 0.45), 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
@@ -471,7 +475,7 @@
                         <div style ="margin-left: -6em; margin-bottom: 2rem; transform: scale(2); transform-origin: left center">
                             @include('components.application-logo')
                         </div>
-                        
+
                         <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6; max-width: 320px;">
                             Platform belajar logika pemrograman #1 untuk siswa SMK
                         </p>
@@ -495,7 +499,7 @@
                             <a href="#" class="footer-link">Discord</a>
                             <a href="#" class="footer-link">GitHub</a>
                         </div>
-                        
+
                         <div style="display: flex; gap: 20px;">
                             {{-- GitHub Icon --}}
                             <a href="#" style="color: #fff; transition: color 0.2s ease;" onmouseover="this.style.color='#22d3ee'" onmouseout="this.style.color='#fff'">
