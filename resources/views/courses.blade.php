@@ -67,35 +67,35 @@
         }
 
         .filter-btn.all { border: 1px solid rgba(124, 58, 237, 0.4); color: #a78bfa; }
-        .filter-btn.all.active, .filter-btn.all:hover { 
-            background: rgba(124, 58, 237, 0.15); 
-            border-color: #7c3aed; 
+        .filter-btn.all.active, .filter-btn.all:hover {
+            background: rgba(124, 58, 237, 0.15);
+            border-color: #7c3aed;
             color: #c4b5fd;
-            box-shadow: 0 0 16px rgba(124, 58, 237, 0.25); 
+            box-shadow: 0 0 16px rgba(124, 58, 237, 0.25);
         }
 
         .filter-btn.beginner { border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; }
-        .filter-btn.beginner.active, .filter-btn.beginner:hover { 
-            background: rgba(16, 185, 129, 0.15); 
-            border-color: #10b981; 
+        .filter-btn.beginner.active, .filter-btn.beginner:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
             color: #6ee7b7;
-            box-shadow: 0 0 16px rgba(16, 185, 129, 0.25); 
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
         }
 
         .filter-btn.amateur { border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; }
-        .filter-btn.amateur.active, .filter-btn.amateur:hover { 
-            background: rgba(59, 130, 246, 0.15); 
-            border-color: #3b82f6; 
+        .filter-btn.amateur.active, .filter-btn.amateur:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: #3b82f6;
             color: #93c5fd;
-            box-shadow: 0 0 16px rgba(59, 130, 246, 0.25); 
+            box-shadow: 0 0 16px rgba(59, 130, 246, 0.25);
         }
 
         .filter-btn.pro { border: 1px solid rgba(249, 115, 22, 0.4); color: #fb923c; }
-        .filter-btn.pro.active, .filter-btn.pro:hover { 
-            background: rgba(249, 115, 22, 0.15); 
-            border-color: #f97316; 
+        .filter-btn.pro.active, .filter-btn.pro:hover {
+            background: rgba(249, 115, 22, 0.15);
+            border-color: #f97316;
             color: #fdba74;
-            box-shadow: 0 0 16px rgba(249, 115, 22, 0.25); 
+            box-shadow: 0 0 16px rgba(249, 115, 22, 0.25);
         }
 
         .search-box {
@@ -310,7 +310,7 @@
     <div class="courses-container">
         <!-- Breadcrumb -->
         <div class="breadcrumb">
-            Home 
+            Home
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
@@ -341,9 +341,17 @@
 
         <!-- Courses Grid -->
         <div class="courses-grid">
-            
+
             <!-- Card 1 -->
-            <div class="course-card beginner">
+                @php $locked1 = empty($statusMateri[1]) || !$statusMateri[1]; @endphp
+                <div class="course-card beginner {{ $locked1 ? 'locked' : '' }}" data-url="/siswa/materi/1">
+                    @if($locked1)
+                    <div class="locked-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                @endif
                 <div class="card-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M4 5h16v4H4V5zm0 6h16v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8zm4 3v2h8v-2H8z" />
@@ -355,19 +363,27 @@
                     <div class="card-meta">
                         <div class="stars">
                             <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
                         </div>
-                        <span class="progress-text">100% Selesai</span>
+                        <span class="progress-text">{{ $progressMateri[1] }}% Selesai</span>
                     </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 100%"></div>
+                        <div class="progress-bar-fill" style="width: {{ $progressMateri[1] }}%"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Card 2 -->
-            <div class="course-card beginner">
+            @php $locked2 = empty($statusMateri[2]) || !$statusMateri[2]; @endphp
+                <div class="course-card beginner {{ $locked2 ? 'locked' : '' }}" data-url="/siswa/materi/1">
+                    @if($locked2)
+                    <div class="locked-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                @endif
                 <div class="card-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M21.0165 17.6336H3.83636V16.4336H21.0165V17.6336Z"/>
@@ -382,19 +398,27 @@
                     <div class="card-meta">
                         <div class="stars">
                             <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
                         </div>
-                        <span class="progress-text">100% Selesai</span>
+                        <span class="progress-text">{{ $progressMateri[2] }}% Selesai</span>
                     </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 100%"></div>
+                        <div class="progress-bar-fill" style="width: {{ $progressMateri[2] }}%"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Card 3 -->
-            <div class="course-card amateur">
+            @php $locked3 = empty($statusMateri[3]) || !$statusMateri[3]; @endphp
+                <div class="course-card amateur {{ $locked3 ? 'locked' : '' }}" data-url="/siswa/materi/3">
+                    @if($locked3)
+                    <div class="locked-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                @endif
                 <div class="card-icon-wrapper">
                     <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"></path>
@@ -409,40 +433,56 @@
                             <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                             <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
                         </div>
-                        <span class="progress-text">100% Selesai</span>
+                        <span class="progress-text">{{ $progressMateri[3] }}% Selesai</span>
                     </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 100%"></div>
+                        <div class="progress-bar-fill" style="width: {{ $progressMateri[3] }}%"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Card 4 -->
-            <div class="course-card amateur">
+            @php $locked4 = empty($statusMateri[4]) || !$statusMateri[4]; @endphp
+                <div class="course-card amateur {{ $locked4 ? 'locked' : '' }}" data-url="/siswa/materi/4">
+                    @if($locked4)
+                    <div class="locked-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                @endif
                 <div class="card-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M15 6a9 9 0 0 0-9 9V3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
-                    </svg>                    
+                    </svg>
                 </div>
                 <h3 class="card-title">Percabangan (if/else)</h3>
                 <p class="card-desc">Buat program yang bisa mengambil keputusan berdasarkan kondisi.</p>
                 <div class="card-footer">
                     <div class="card-meta">
                         <div class="stars">
-                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                             <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
                         </div>
-                        <span class="progress-text">25% Selesai</span>
+                        <span class="progress-text">{{ $progressMateri[4] }}% Selesai</span>
                     </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 25%"></div>
+                        <div class="progress-bar-fill" style="width: {{ $progressMateri[4] }}%"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Card 5 (Locked) -->
-            <div class="course-card pro locked">
+            @php $locked5 = empty($statusMateri[5]) || !$statusMateri[5]; @endphp
+                <div class="course-card pro {{ $locked5 ? 'locked' : '' }}" data-url="/siswa/materi/5">
+                    @if($locked5)
+                    <div class="locked-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                @endif
                 <div class="locked-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
@@ -461,20 +501,28 @@
                 <div class="card-footer">
                     <div class="card-meta">
                         <div class="stars">
-                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                         </div>
-                        <span class="progress-text">0% Selesai</span>
+                        <span class="progress-text">{{ $progressMateri[5] }}% Selesai</span>
                     </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 0%"></div>
+                        <div class="progress-bar-fill" style="width: {{ $progressMateri[5] }}%"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Card 6 (Locked) -->
-            <div class="course-card pro locked">
+            @php $locked6 = empty($statusMateri[6]) || !$statusMateri[6]; @endphp
+                <div class="course-card pro {{ $locked6 ? 'locked' : '' }}" data-url="/siswa/materi/6">
+                    @if($locked6)
+                    <div class="locked-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                @endif
                 <div class="locked-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
@@ -491,14 +539,14 @@
                 <div class="card-footer">
                     <div class="card-meta">
                         <div class="stars">
-                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                            <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                         </div>
-                        <span class="progress-text">0% Selesai</span>
+                        <span class="progress-text">{{ $progressMateri[6] }}% Selesai</span>
                     </div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: 0%"></div>
+                        <div class="progress-bar-fill" style="width: {{ $progressMateri[6] }}%"></div>
                     </div>
                 </div>
             </div>
@@ -511,14 +559,14 @@
             const filterBtns = document.querySelectorAll('.filter-btn');
             const courses = document.querySelectorAll('.course-card');
             const searchInput = document.querySelector('.search-box input');
-            
+
             // Store original text of titles and descriptions to allow resetting before highlighting
             courses.forEach((course, index) => {
                 const titleEl = course.querySelector('.card-title');
                 const descEl = course.querySelector('.card-desc');
                 course.dataset.originalTitle = titleEl.textContent;
                 course.dataset.originalDesc = descEl.textContent;
-                
+
                 // Add click listener for navigation
                 course.addEventListener('click', () => {
                     if (!course.classList.contains('locked')) {
@@ -556,18 +604,18 @@
 
                     const originalTitle = course.dataset.originalTitle;
                     const originalDesc = course.dataset.originalDesc;
-                    
+
                     const titleMatch = originalTitle.toLowerCase().includes(searchQuery.toLowerCase());
                     const descMatch = originalDesc.toLowerCase().includes(searchQuery.toLowerCase());
                     const matchesSearch = searchQuery === '' || titleMatch || descMatch;
 
                     if (matchesFilter && matchesSearch) {
                         course.style.display = 'flex';
-                        
+
                         // Apply highlighting
                         const titleEl = course.querySelector('.card-title');
                         const descEl = course.querySelector('.card-desc');
-                        
+
                         titleEl.innerHTML = highlightText(originalTitle, searchQuery);
                         descEl.innerHTML = highlightText(originalDesc, searchQuery);
                     } else {
@@ -583,12 +631,12 @@
                     filterBtns.forEach(b => b.classList.remove('active'));
                     // Add active to clicked
                     btn.classList.add('active');
-                    
+
                     if (btn.classList.contains('all')) currentFilter = 'all';
                     else if (btn.classList.contains('beginner')) currentFilter = 'beginner';
                     else if (btn.classList.contains('amateur')) currentFilter = 'amateur';
                     else if (btn.classList.contains('pro')) currentFilter = 'pro';
-                    
+
                     updateUI();
                 });
             });
@@ -598,7 +646,7 @@
                 searchQuery = e.target.value.trim();
                 updateUI();
             });
-            
+
             searchInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();

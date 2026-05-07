@@ -138,4 +138,48 @@ class PuzzleController extends Controller
         ]);
     }
 
+    public function courses() {
+        $user = auth()->user();
+        $subWilayahId = auth()->user()->sub_wilayah_id;
+        $subWilayah = $user->subWilayah;
+
+        if ($subWilayah) {
+            $statusMateri = [
+                1 => (bool) $subWilayah->materi_1_aktif,
+                2 => (bool) $subWilayah->materi_2_aktif,
+                3 => (bool) $subWilayah->materi_3_aktif,
+                4 => (bool) $subWilayah->materi_4_aktif,
+                5 => (bool) $subWilayah->materi_5_aktif,
+                6 => (bool) $subWilayah->materi_6_aktif,
+            ];
+        } else {
+            $statusMateri = [
+                1 => false, 2 => false, 3 => false, 4 => false, 5 => false, 6 => false
+            ];
+        }
+        $user = auth()->user();
+        $siswaId = $user->id;
+        $progressMateri = [];
+        for ($i = 1; $i <= 6; $i++) {
+            $penilaian = \App\Models\Penilaian::where('siswa_id', $siswaId)
+                ->where('materi_ke', $i)
+                ->first();
+
+            // Logika Sederhana: Cek Post-test dulu, baru Pre-test
+            if ($penilaian && !is_null($penilaian->skor_post)) {
+                // Jika sudah mengerjakan Post-test, progres langsung penuh
+                $progressMateri[$i] = 100;
+            } elseif ($penilaian && !is_null($penilaian->skor_pre)) {
+                // Jika baru mengerjakan Pre-test
+                $progressMateri[$i] = 40;
+            } else {
+                // Belum mengerjakan apapun
+                $progressMateri[$i] = 0;
+            }
+        }
+
+        return view('courses', compact('statusMateri', 'progressMateri'));
+
+    }
+
 }

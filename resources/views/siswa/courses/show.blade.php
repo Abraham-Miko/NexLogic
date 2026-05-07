@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Course Content - NexLogic</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -210,7 +211,7 @@
             display: flex;
             justify-content: center;
         }
-        
+
         .content-area::-webkit-scrollbar { width: 6px; }
         .content-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
@@ -247,7 +248,7 @@
             margin-bottom: 20px;
             font-size: 0.95rem;
         }
-        
+
         .mcq-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -467,10 +468,9 @@
             </svg>
             Keluar
         </a>
-        
+
         <div class="top-right">
-            <span class="exp-badge">0 EXP</span>
-            
+
             @auth
                 <div x-data="{ openProfile: false }" style="position: relative;">
                     <button @click="openProfile = !openProfile" class="user-dropdown-btn">
@@ -532,7 +532,7 @@
 
     <!-- Main Container Layout -->
     <div style="display: flex; flex-grow: 1; overflow: hidden; width: 100%;">
-        
+
         <!-- Left Official Sidebar -->
         @include('layouts.side_navigation')
 
@@ -541,52 +541,124 @@
             <!-- Content Area -->
             <main class="content-area">
                 <div class="content-card">
-                    
+
                     <h1 class="content-title" x-text="activeTopicName">Lorem ipsum</h1>
-                    
-                    <!-- Pretest / Posttest View (10 Questions) -->
-                    <div x-show="currentStep === 0 || currentStep === 6" style="display: flex; flex-direction: column; gap: 64px; padding-bottom: 40px; display: none;" x-effect="$el.style.display = (currentStep === 0 || currentStep === 6) ? 'flex' : 'none'">
-                        <template x-for="q in 10" :key="q">
-                            <div class="quiz-box">
-                                <h2>Soal <span x-text="q"></span></h2>
-                                
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                
-                                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 12px;">Lorem ipsum dolor sit amet</p>
-                                
-                                <div class="code-block">
-                                    print("Hello, World!")
+
+                    <!-- Pretest View -->
+                    <div x-show="currentStep === 0" style="display: flex; flex-direction: column; gap: 64px; padding-bottom: 40px; display: none;" x-effect="$el.style.display = (currentStep === 0) ? 'flex' : 'none'">
+
+                        <template x-if="skorPre !== null">
+                            <div style="text-align: center; padding: 60px 0; background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 16px; margin-top: 24px;">
+                                <div style="font-size: 4rem; margin-bottom: 16px;">🎯</div>
+                                <h2 style="color: white; margin-bottom: 8px;">Pre-test Selesai</h2>
+                                <p style="color: #94a3b8; margin-bottom: 24px;">Anda sudah mengerjakan pre-test ini.</p>
+                                <div style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(126, 34, 206, 0.2)); border: 1px solid var(--purple-neon); border-radius: 12px;">
+                                    <span style="display: block; font-size: 0.85rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Skor Anda</span>
+                                    <span style="font-size: 2.5rem; font-weight: 700; color: white;" x-text="skorPre"></span>
                                 </div>
-                                
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                                
-                                <div class="mcq-grid">
-                                    <!-- Simple static options for demo, usually would use dynamic data -->
-                                    <button class="mcq-btn">A. Lorem ipsum dolor sit amet</button>
-                                    <button class="mcq-btn">B. Lorem ipsum dolor sit amet</button>
-                                    <button class="mcq-btn">C. Lorem ipsum dolor sit amet</button>
-                                    <button class="mcq-btn">D. Lorem ipsum dolor sit amet</button>
+                                <div style="margin-top: 32px;">
+                                    <button @click="nextStep" class="btn-primary" style="padding: 12px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: white; font-weight: 600; border: none; cursor: pointer;">Lanjut ke Materi &rarr;</button>
                                 </div>
                             </div>
+                        </template>
+
+                        <template x-if="skorPre === null && preTestQuestions.length > 0">
+                            <div>
+                                <template x-for="(q, index) in preTestQuestions" :key="q.id">
+                                    <div class="quiz-box" style="margin-bottom: 48px;">
+                                        <h2>Soal <span x-text="index + 1"></span></h2>
+                                        <p x-text="q.soal"></p>
+
+                                        <div class="mcq-grid">
+                                            <button class="mcq-btn" :class="{ 'selected': preTestAnswers[q.id] === 'A' }" @click="preTestAnswers[q.id] = 'A'">
+                                                A. <span x-text="q.opsi_a"></span>
+                                            </button>
+                                            <button class="mcq-btn" :class="{ 'selected': preTestAnswers[q.id] === 'B' }" @click="preTestAnswers[q.id] = 'B'">
+                                                B. <span x-text="q.opsi_b"></span>
+                                            </button>
+                                            <button class="mcq-btn" :class="{ 'selected': preTestAnswers[q.id] === 'C' }" @click="preTestAnswers[q.id] = 'C'">
+                                                C. <span x-text="q.opsi_c"></span>
+                                            </button>
+                                            <button class="mcq-btn" :class="{ 'selected': preTestAnswers[q.id] === 'D' }" @click="preTestAnswers[q.id] = 'D'">
+                                                D.<span x-text="q.opsi_d"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div style="display: flex; justify-content: flex-end; margin-top: 32px;">
+                                    <button @click="submitTest('pre_test')" :disabled="isSubmitting" class="btn-primary" style="padding: 14px 32px; border-radius: 12px; background: linear-gradient(135deg, #a855f7, #7e22ce); color: white; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);">
+                                        <span x-show="!isSubmitting">Kirim Jawaban Pre-test</span>
+                                        <span x-show="isSubmitting">Mengirim...</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="preTestQuestions.length === 0">
+                            <div style="text-align: center; color: #94a3b8; padding: 40px 0;">Belum ada soal pre-test untuk materi ini.</div>
                         </template>
                     </div>
 
                     <!-- Materi Text View -->
-                    <div x-show="currentStep >= 1 && currentStep <= 5" style="padding-bottom: 40px; display: none;" x-effect="$el.style.display = (currentStep >= 1 && currentStep <= 5) ? 'block' : 'none'">
-                        <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 24px;">
-                            Ini adalah konten artikel materi teks biasa untuk topik <strong x-text="activeTopicName" style="color: #fff;"></strong>. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl. Sed vel felis felis. Sed non mi vitae mi pulvinar ultrices.
-                        </p>
-                        <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 24px;">
-                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris interdum facilisis convallis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed laoreet dui id est accumsan, at faucibus lectus bibendum.
-                        </p>
-                        <div class="code-block">
-                            // Contoh snippet materi<br>
-                            let greeting = "Belajar di NexLogic";<br>
-                            console.log(greeting);
-                        </div>
-                        <p style="color: #cbd5e1; line-height: 1.8;">
-                            Silakan lanjutkan membaca atau tekan Next untuk menuju ke langkah berikutnya.
-                        </p>
+                    <div x-show="currentStep >= 1 && currentStep < totalSteps" style="padding-bottom: 40px; display: none;" x-effect="$el.style.display = (currentStep >= 1 && currentStep < totalSteps) ? 'block' : 'none'">
+                        @include('siswa.courses.materi.materi_' . $id)
+                    </div>
+
+                    <!-- Posttest View -->
+                    <div x-show="currentStep === totalSteps" style="display: flex; flex-direction: column; gap: 64px; padding-bottom: 40px; display: none;" x-effect="$el.style.display = (currentStep === totalSteps) ? 'flex' : 'none'">
+
+                        <template x-if="skorPost !== null">
+                            <div style="text-align: center; padding: 60px 0; background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 16px; margin-top: 24px;">
+                                <div style="font-size: 4rem; margin-bottom: 16px;">🏆</div>
+                                <h2 style="color: white; margin-bottom: 8px;">Post-test Selesai</h2>
+                                <p style="color: #94a3b8; margin-bottom: 24px;">Anda sudah mengerjakan post-test ini.</p>
+                                <div style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(126, 34, 206, 0.2)); border: 1px solid var(--purple-neon); border-radius: 12px;">
+                                    <span style="display: block; font-size: 0.85rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Skor Anda</span>
+                                    <span style="font-size: 2.5rem; font-weight: 700; color: white;" x-text="skorPost"></span>
+                                </div>
+                                <div style="margin-top: 32px;">
+                                    <a href="{{ route('dashboard') }}" class="btn-primary" style="padding: 12px 28px; border-radius: 12px; background: linear-gradient(135deg, #553aed, #2834d9); color: white; font-weight: 600; border: none; cursor: pointer; text-decoration: none;">Kembali ke Dashboard</a>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="skorPost === null && postTestQuestions.length > 0">
+                            <div>
+                                <template x-for="(q, index) in postTestQuestions" :key="q.id">
+                                    <div class="quiz-box" style="margin-bottom: 48px;">
+                                        <h2>Soal <span x-text="index + 1"></span></h2>
+                                        <p x-text="q.soal"></p>
+
+                                        <div class="mcq-grid">
+                                            <button class="mcq-btn" :class="{ 'selected': postTestAnswers[q.id] === 'A' }" @click="postTestAnswers[q.id] = 'A'">
+                                                A. <span x-text="q.opsi_a"></span>
+                                            </button>
+                                            <button class="mcq-btn" :class="{ 'selected': postTestAnswers[q.id] === 'B' }" @click="postTestAnswers[q.id] = 'B'">
+                                                B. <span x-text="q.opsi_b"></span>
+                                            </button>
+                                            <button class="mcq-btn" :class="{ 'selected': postTestAnswers[q.id] === 'C' }" @click="postTestAnswers[q.id] = 'C'">
+                                                C. <span x-text="q.opsi_c"></span>
+                                            </button>
+                                            <button class="mcq-btn" :class="{ 'selected': postTestAnswers[q.id] === 'D' }" @click="postTestAnswers[q.id] = 'D'">
+                                                D. <span x-text="q.opsi_d"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div style="display: flex; justify-content: flex-end; margin-top: 32px;">
+                                    <button @click="submitTest('post_test')" :disabled="isSubmitting" class="btn-primary" style="padding: 14px 32px; border-radius: 12px; background: linear-gradient(135deg, #a855f7, #7e22ce); color: white; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);">
+                                        <span x-show="!isSubmitting">Kirim Jawaban Post-test</span>
+                                        <span x-show="isSubmitting">Mengirim...</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="postTestQuestions.length === 0">
+                            <div style="text-align: center; color: #94a3b8; padding: 40px 0;">Belum ada soal post-test untuk materi ini.</div>
+                        </template>
                     </div>
 
                 </div>
@@ -600,11 +672,11 @@
                     </svg>
                     Previous
                 </button>
-                
+
                 <div class="active-topic-indicator">
                     <span x-text="activeTopicName">Variabel & Tipe Data</span>
                 </div>
-                
+
                 <button class="nav-btn" @click="nextStep">
                     Next
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -617,92 +689,86 @@
         <!-- Right Sidebar (Daftar Puzzle) -->
         <aside class="right-sidebar" :class="{ 'closed': !rightSidebarOpen }">
             <div class="right-sidebar-header">
-                <h3>Daftar Puzzle</h3>
+                <h3>Daftar Isi</h3>
                 <button @click="toggleRightSidebar" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
-            
+
             <div class="accordion-container">
-                <!-- Section 1 -->
-                <div class="accordion-item" :class="{ 'open': openSection === 1 }">
-                    <div class="accordion-header" @click="openSection = openSection === 1 ? null : 1">
+                <div class="accordion-item open">
+                    <div class="accordion-header">
                         <div class="title-wrap">
                             <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                             </svg>
-                            Variabel & Tipe Data
+                            {{ $judul_materi }}
                         </div>
                     </div>
-                    <div class="accordion-body">
+
+                    <div class="accordion-body" style="display: block;">
                         <ul class="topic-list">
-                            <!-- Pretest -->
                             <li class="topic-item" :class="{ 'active': currentStep === 0 }" @click="selectStep(0, 'Pretest')">
                                 <div class="topic-circle">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                 </div>
-                                <span>Pretest</span>
+                                <span>Pre-test</span>
                             </li>
-                            
-                            <!-- Materi Utama -->
-                            <template x-for="i in 5" :key="i">
-                                <li class="topic-item" :class="{ 'active': currentStep === i }" @click="selectStep(i, 'Mengenal Variabel ' + i)">
-                                    <div class="topic-circle" x-text="i"></div>
-                                    <span x-text="'Mengenal Variabel ' + i"></span>
+
+                            <template x-for="(topic, index) in materiTopics" :key="index">
+                                <li class="topic-item"
+                                    :class="{
+                                        'active': currentStep === (index + 1),
+                                        'locked': skorPre === null && preTestQuestions.length > 0
+                                    }"
+                                    @click="selectStep(index + 1, topic)"
+                                    :style="skorPre === null && preTestQuestions.length > 0 ? 'opacity: 0.5; cursor: not-allowed;' : ''">
+                                    <div class="topic-circle">
+                                        <template x-if="skorPre === null && preTestQuestions.length > 0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            </svg>
+                                        </template>
+                                        <template x-if="!(skorPre === null && preTestQuestions.length > 0)">
+                                            <span x-text="index + 1"></span>
+                                        </template>
+                                    </div>
+                                    <span x-text="topic"></span>
                                 </li>
                             </template>
 
-                            <!-- Posttest -->
-                            <li class="topic-item" :class="{ 'active': currentStep === 6 }" @click="selectStep(6, 'Posttest')">
+                            <li class="topic-item"
+                                :class="{
+                                    'active': currentStep === totalSteps,
+                                    'locked': skorPre === null && preTestQuestions.length > 0
+                                }"
+                                @click="selectStep(totalSteps, 'Posttest')"
+                                :style="skorPre === null && preTestQuestions.length > 0 ? 'opacity: 0.5; cursor: not-allowed;' : ''">
                                 <div class="topic-circle">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                    <template x-if="skorPre === null && preTestQuestions.length > 0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
+                                    </template>
+                                    <template x-if="!(skorPre === null && preTestQuestions.length > 0)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </template>
                                 </div>
-                                <span>Posttest</span>
+                                <span>Post-test</span>
                             </li>
                         </ul>
                     </div>
                 </div>
-
-                <!-- Section 2 (Locked) -->
-                <div class="accordion-item" style="opacity: 0.5;">
-                    <div class="accordion-header" style="cursor: not-allowed;">
-                        <div class="title-wrap">
-                            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
-                            Operator & Ekspresi
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Section 3 (Locked) -->
-                <div class="accordion-item" style="opacity: 0.5;">
-                    <div class="accordion-header" style="cursor: not-allowed;">
-                        <div class="title-wrap">
-                            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
-                            Input & Output
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                </div>
-
             </div>
         </aside>
     </div>
-    
+
 
 
     <!-- Floating Hamburger Icon (Tampil saat Right Sidebar ditutup) -->
@@ -721,17 +787,85 @@
                 currentStep: 0, // Mulai dari Pretest
                 activeTopicName: 'Pretest',
 
+                // Variabel Dinamis dari Backend
+                courseId: {{ $id }},
+                preTestQuestions: @json($preTestQuestions),
+                postTestQuestions: @json($postTestQuestions),
+                materiTopics: @json($materiTopics),
+                preTestAnswers: {},
+                postTestAnswers: {},
+                skorPre: @json($skorPre),
+                skorPost: @json($skorPost),
+                isSubmitting: false,
+
+                get totalSteps() {
+                    return this.materiTopics.length + 1;
+                },
+
                 toggleRightSidebar() {
                     this.rightSidebarOpen = !this.rightSidebarOpen;
                 },
-                
+
+                async submitTest(type) {
+                    if (this.isSubmitting) return;
+
+                    const answers = type === 'pre_test' ? this.preTestAnswers : this.postTestAnswers;
+                    const questions = type === 'pre_test' ? this.preTestQuestions : this.postTestQuestions;
+
+                    if (Object.keys(answers).length < questions.length) {
+                        alert('Harap jawab semua pertanyaan sebelum mengirim!');
+                        return;
+                    }
+
+                    this.isSubmitting = true;
+                    try {
+                        const response = await fetch(`/courses/${this.courseId}/submit-test`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ type, answers })
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            if (type === 'pre_test') {
+                                this.skorPre = result.score;
+                            } else {
+                                this.skorPost = result.score;
+                            }
+                            // Next step otomatis
+                            // if (type === 'pre_test') {
+                            //     this.nextStep();
+                            // }
+                        } else {
+                            alert(result.error || 'Terjadi kesalahan.');
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('Gagal mengirim jawaban.');
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+                },
+
                 selectStep(step, name) {
+                    if (step > 0 && this.skorPre === null && this.preTestQuestions.length > 0) {
+                        alert('Silakan selesaikan Pre-test terlebih dahulu untuk mengakses materi!');
+                        return;
+                    }
                     this.currentStep = step;
                     this.updateTopicName();
                 },
 
                 nextStep() {
-                    if (this.currentStep < 6) {
+                    if (this.currentStep === 0 && this.skorPre === null && this.preTestQuestions.length > 0) {
+                        alert('Silakan selesaikan Pre-test terlebih dahulu untuk melanjutkan!');
+                        return;
+                    }
+                    if (this.currentStep < this.totalSteps) {
                         this.currentStep++;
                         this.updateTopicName();
                     }
@@ -743,14 +877,14 @@
                         this.updateTopicName();
                     }
                 },
-                
+
                 updateTopicName() {
                     if (this.currentStep === 0) {
                         this.activeTopicName = 'Pretest';
-                    } else if (this.currentStep === 6) {
+                    } else if (this.currentStep === this.totalSteps) {
                         this.activeTopicName = 'Posttest';
                     } else {
-                        this.activeTopicName = 'Mengenal Variabel ' + this.currentStep;
+                        this.activeTopicName = this.materiTopics[this.currentStep - 1];
                     }
                     // Scroll to top of content
                     document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
