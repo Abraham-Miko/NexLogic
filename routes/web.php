@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\SubWilayahController;
+use App\Http\Controllers\LeaderboardController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -64,6 +65,9 @@ Route::prefix('superadmin')->name('superadmin.')->group(function () {
 Route::middleware('auth')->group(function () {
     // Route untuk menampilkan halaman profil (sesuaikan nama view/jalurnya jika berbeda)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // Route Leaderboard
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
 
     // Route untuk memproses update profil (Ini yang dipanggil di action form kamu)
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
