@@ -28,7 +28,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nomor_induk' => ['required', 'string'],
+            'login_id' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -42,13 +42,22 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('nomor_induk', 'password'), $this->boolean('remember'))) {
+        $loginId = $this->input('login_id');
+        $password = $this->input('password');
+
+        $user = \App\Models\User::where('nomor_induk', $loginId)
+            ->orWhere('nama', $loginId)
+            ->first();
+
+        if (! $user || ! \Illuminate\Support\Facades\Hash::check($password, $user->password)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'nomor_induk' => trans('auth.failed'),
+                'login_id' => trans('auth.failed'),
             ]);
         }
+
+        Auth::login($user, $this->boolean('remember'));
 
         RateLimiter::clear($this->throttleKey());
     }
@@ -69,7 +78,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'nomor_induk' => trans('auth.throttle', [
+            'login_id' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -81,6 +90,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('nomor_induk')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('login_id')).'|'.$this->ip());
     }
 }
