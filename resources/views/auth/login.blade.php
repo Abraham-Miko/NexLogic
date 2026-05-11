@@ -115,6 +115,35 @@
             color: #475569;
         }
 
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .password-wrapper .form-input {
+            padding-right: 45px;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+        
+        .toggle-password:hover,
+        .toggle-password.active {
+            color: #a78bfa;
+        }
+
         /* Options row (Remember me & Forgot Password) */
         .form-options {
             display: flex;
@@ -244,22 +273,36 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                {{-- nomor_induk --}}
+                {{-- Nomor Induk atau Nama --}}
                 <div class="form-group">
-                    <label for="nomor_induk" class="form-label">Nomor Induk</label>
-                    <input id="nomor_induk" type="string" name="nomor_induk"
-                        class="form-input @error('nomor_induk') is-invalid @enderror"
-                        placeholder="22000000" required autofocus autocomplete="username">
-
+                    <label for="login_id" class="form-label">Nama Akun</label>
+                    <input id="login_id" type="string" name="login_id"
+                        class="form-input @error('login_id') is-invalid @enderror"
+                        placeholder="Masukkan Nama/NIS Anda" required autofocus autocomplete="username">
                 </div>
 
                 {{-- Password --}}
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
-                    <input id="password" type="password" name="password"
-                        class="form-input @error('password') is-invalid @enderror"
-                        placeholder="••••••••" required autocomplete="current-password">
-
+                    <div class="password-wrapper">
+                        <input id="password" type="password" name="password"
+                            class="form-input @error('password') is-invalid @enderror"
+                            placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button"
+                            class="toggle-password"
+                            data-target="password"
+                            aria-pressed="false"
+                            aria-label="Tampilkan password">
+                            <svg class="eye-show" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg class="eye-hide" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 {{-- Peringatan Error (Tampil di atas tombol login) --}}
@@ -285,6 +328,40 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function togglePassword(button, fieldId) {
+            const field = document.getElementById(fieldId);
+            if (!field) return;
+
+            const show = field.type === 'password';
+            field.type = show ? 'text' : 'password';
+
+            button.classList.toggle('active', show);
+            button.setAttribute('aria-pressed', show ? 'true' : 'false');
+            button.setAttribute('aria-label', show ? 'Sembunyikan password' : 'Tampilkan password');
+
+            const eyeShow = button.querySelector('.eye-show');
+            const eyeHide = button.querySelector('.eye-hide');
+            
+            if (show) {
+                eyeShow.style.display = 'none';
+                eyeHide.style.display = 'block';
+            } else {
+                eyeShow.style.display = 'block';
+                eyeHide.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.toggle-password').forEach(btn => {
+            const target = btn.getAttribute('data-target');
+            if (target) {
+                btn.addEventListener('click', () => togglePassword(btn, target));
+            }
+            });
+        });
+    </script>
 </body>
 
 </x-guest-layout>

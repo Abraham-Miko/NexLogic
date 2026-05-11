@@ -130,10 +130,69 @@
         0%, 100% { box-shadow: 0 0 8px rgba(129,140,248,0.9); }
         50% { box-shadow: 0 0 16px rgba(129,140,248,0.4); }
     }
+    .header-navigation {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+    .back-link {
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        transition: opacity 0.2s ease-in-out;
+    }
+    .back-link:hover { 
+        opacity: 0.8; 
+    }
+    .back-link svg { 
+        width: 20px; 
+        height: 20px; 
+        fill: #f8fafc; 
+    }    
+    .breadcrumb {
+        display: flex; 
+        align-items: center; 
+        gap: 16px;
+        font-size: 1.25rem; 
+        font-weight: 500;
+    }
+    .breadcrumb a {
+        color: #9ca3af; 
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+        font-size: 16px;
+    }
+    .breadcrumb svg { 
+        width: 20px; 
+        height: 20px; 
+        color: #f8fafc;
+    }
+    .breadcrumb span {
+        font-size: 16px;
+        color: #f8fafc;
+    }
 </style>
 
 <div class="p-8" style="min-height: 100%;">
     <div class="max-w-7xl mx-auto">
+
+        <!-- Breadcrumb -->
+        <div class="header-navigation">
+            <a href="{{ route('/') }}" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                    <path d="M232,128a8,8,0,0,1-8,8H91.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L91.31,120H224A8,8,0,0,1,232,128ZM40,32a8,8,0,0,0-8,8V216a8,8,0,0,0,16,0V40A8,8,0,0,0,40,32Z"></path>
+                </svg>
+            </a>
+
+            <div class="breadcrumb">
+                <a href="{{ route('superadmin.dashboard') }}">Dashboard</a>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+                <span>Overview</span>
+            </div>
+        </div>
 
         <!-- ── Page Header ── -->
         <div class="mb-8">

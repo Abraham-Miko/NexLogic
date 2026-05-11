@@ -1,4 +1,3 @@
-{{-- subwilayah.show.blade.php --}}
 @extends('layouts.superadmin')
 
 @section('content')
@@ -209,6 +208,48 @@
         border: 1px solid rgba(99, 102, 241, 0.25);
         backdrop-filter: blur(20px);
     }
+    .header-navigation {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+    .back-link {
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        transition: opacity 0.2s ease-in-out;
+    }
+    .back-link:hover { 
+        opacity: 0.8; 
+    }
+    .back-link svg { 
+        width: 20px; 
+        height: 20px; 
+        fill: #f8fafc; 
+    }    
+    .breadcrumb {
+        display: flex; 
+        align-items: center; 
+        gap: 16px;
+        font-size: 1.25rem; 
+        font-weight: 500;
+    }
+    .breadcrumb a {
+        color: #9ca3af; 
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+        font-size: 16px;
+    }
+    .breadcrumb svg { 
+        width: 20px; 
+        height: 20px; 
+        color: #f8fafc;
+    }
+    .breadcrumb span {
+        font-size: 16px;
+        color: #f8fafc;
+    }
 </style>
 
 <div class="p-8">
@@ -217,13 +258,31 @@
         <!-- ── Header ── -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
-                <a href="{{ route('superadmin.wilayah.show', $subWilayah->wilayah_id) }}" class="back-link">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                <!-- Breadcrumb -->
+                <div class="header-navigation">
+                    <a href="{{ route('/') }}" class="back-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                            <path d="M232,128a8,8,0,0,1-8,8H91.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L91.31,120H224A8,8,0,0,1,232,128ZM40,32a8,8,0,0,0-8,8V216a8,8,0,0,0,16,0V40A8,8,0,0,0,40,32Z"></path>
+                        </svg>
+                    </a>
+
+                <div class="breadcrumb">
+                    <a href="{{ route('superadmin.dashboard') }}">Dashboard</a>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
-                    Kembali ke Wilayah
-                </a>
-                <h1 class="text-2xl font-bold text-white mt-1" style="font-family: 'Orbitron', sans-serif; letter-spacing: 0.04em;">
+                    <a href="{{ route('superadmin.wilayah') }}">Manajemen Wilayah</a>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    <a href="{{ route('superadmin.wilayah.show', $subWilayah->wilayah->id) }}">{{ $subWilayah->wilayah->nama_wilayah }}</a>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    <span>{{ $subWilayah->nama_sub_wilayah }}</span>
+                </div>
+            </div>
+            <h1 class="text-2xl font-bold text-white mt-1" style="font-family: 'Orbitron', sans-serif; letter-spacing: 0.04em;">
                     Kelas: <span style="background: linear-gradient(135deg, #a78bfa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">{{ $subWilayah->nama_sub_wilayah }}</span>
                 </h1>
                 <p class="text-slate-500 text-sm mt-1">Kelola data siswa di sini.</p>
@@ -345,7 +404,7 @@
                                         </svg>
                                     </div>
                                     <h3 class="text-base font-semibold text-white mb-1">Belum Ada Siswa</h3>
-                                    <p class="text-sm text-slate-500 max-w-sm">Kelas ini masih kosong. Klik <span class="text-emerald-400 font-medium">Tambah Siswa Baru</span> untuk memulai.</p>
+                                    <p class="text-sm text-slate-500 max-w-sm">Kelas ini masih kosong. Klik <button onclick="openModal('modal-tambah-siswa')" class="text-emerald-400 font-medium">Tambah Siswa Baru</button> untuk memulai.</p>
                                 </div>
                             </td>
                         </tr>
