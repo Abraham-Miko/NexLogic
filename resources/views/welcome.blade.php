@@ -281,7 +281,7 @@
                     </h1>
 
                     <p class="anim-fade-3" style="font-size: 1rem; color: #64748b; line-height: 1.7; max-width: 480px; margin-bottom: 40px;">
-                        Platform e-learning khusus untuk melatih nalar dan algoritma dasar pemrograman.
+                        Platform E-Learning khusus untuk melatih nalar dan algoritma dasar pemrograman.
                         Pahami konsepnya dari nol, selesaikan tantangan logika, dan bersainglah di papan peringkat kelasmu!
                     </p>
 
@@ -425,7 +425,7 @@
                         <p class="feature-desc">Pelajari cara program komputer "mengingat" sebuah informasi. Mulai dari menyimpan teks, angka bulat, hingga bilangan desimal ke dalam memori.</p>
                     </div>
                     <div class="feature-card">
-                        <h3 class="feature-heading">Operator Matematika</h3>
+                        <h3 class="feature-heading">Operator</h3>
                         <p class="feature-desc">Pahami bagaimana komputer melakukan perhitungan matematika dan perbandingan logika untuk mengolah data mentah menjadi informasi yang berguna.</p>
                     </div>
                     <div class="feature-card">

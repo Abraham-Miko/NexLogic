@@ -104,7 +104,17 @@
             </div>
             <div class="stat-card">
                 <span style="color: #94a3b8;">Peringkat Kelas</span>
-                <div class="stat-value">#{{ $userRank }}</div> </div>
+                <div class="stat-value">
+
+                    @if (!empty($user->sub_wilayah_id))
+                        {{-- Ganti 'sub_wilayah_id' dengan nama kolom yang sesuai di database Anda --}}
+                        #{{ $userRank }}
+                    @else
+                        <p style="font-size: 2rem; display: block;">Belum Ada Wilayah</p>
+                    @endif
+
+                </div>
+            </div>
         </div>
 
         <div class="materi-list">
