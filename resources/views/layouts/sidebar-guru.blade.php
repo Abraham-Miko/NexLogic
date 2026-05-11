@@ -11,6 +11,19 @@
         <!-- Navigation -->
         <nav class="space-y-1">
 
+            <a href="{{ route('/') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition
+                {{ request()->is('/')
+                    ? 'bg-[#2d2a54] border border-[#4c489d] text-white shadow-[0_0_15px_rgba(76,72,157,0.3)]'
+                    : 'border border-transparent text-gray-400 hover:text-white' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 2.5L21 10.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 11v8.5a1.5 1.5 0 001.5 1.5h11a1.5 1.5 0 001.5-1.5V11" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 21v-6.5l3-2.5 3 2.5V21" />
+            </svg>
+                <span>Home Page</span>
+            </a>
+
             <!-- 1. Overview / Dashboard -->
             <a href="/guru/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg transition
                 {{ request()->is('guru/dashboard*')
@@ -85,7 +98,7 @@
             </div>
             <div class="truncate">
                 <p class="font-medium text-white truncate text-sm">{{ Auth::user()->nama }}</p>
-                <p class="text-xs text-gray-400">Guru</p>
+                <p class="text-xs text-gray-400">{{ strtoupper(str_replace('_', ' ', Auth::user()->role)) }}</p>
             </div>
         </div>
 

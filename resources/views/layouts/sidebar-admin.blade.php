@@ -37,6 +37,22 @@
             border-radius: 0 3px 3px 0;
         }
 
+        .sa-nav-home:hover {
+            background: rgba(124, 58, 237, 0.08);
+            border-color: rgba(124, 58, 237, 0.3);
+            color: #a78bfa;
+        }
+        .sa-nav-home.active {
+            background: rgba(124, 58, 237, 0.12);
+            border-color: rgba(124, 58, 237, 0.4);
+            color: #a78bfa;
+            box-shadow: 0 0 18px rgba(124, 58, 237, 0.2), inset 0 0 12px rgba(124, 58, 237, 0.05);
+        }
+        .sa-nav-home.active::before {
+            background: linear-gradient(to bottom, #7c3aed, #a78bfa);
+            box-shadow: 0 0 8px rgba(124, 58, 237, 0.6);
+        }
+
         /* Dashboard — Neon Purple */
         .sa-nav-dashboard:hover {
             background: rgba(124, 58, 237, 0.08);
@@ -256,6 +272,17 @@
 
         <!-- ── Navigation ── -->
         <nav class="space-y-1 mt-12">
+
+            {{-- Home Page --}}
+            <a href="{{ route('/') }}"
+                class="sa-nav-item sa-nav-home{{ request()->is('/') ? 'active' : '' }}"title="Home Page">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 2.5L21 10.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 11v8.5a1.5 1.5 0 001.5 1.5h11a1.5 1.5 0 001.5-1.5V11" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 21v-6.5l3-2.5 3 2.5V21" />
+            </svg>
+                <span>Home Page</span>
+            </a>
 
             <!-- Dashboard -->
             <a href="{{ route('superadmin.dashboard') }}"
