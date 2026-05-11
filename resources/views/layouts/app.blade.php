@@ -15,7 +15,7 @@
                 --bg-deep: #080e1a;
                 --bg-card: #0f172a;
                 --sidebar-bg: #0a1020;
-                --purple: #7c3aed;
+                --purple: #7c3aed;  
                 --purple-light: #a78bfa;
                 --purple-glow: rgba(124, 58, 237, 0.35);
                 --border: rgba(99, 102, 241, 0.15);

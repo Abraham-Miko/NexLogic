@@ -206,32 +206,32 @@
         box-shadow: 0 0 12px rgba(99,102,241,0.2);
     }
 
-    .action-btn-edit {
-        padding: 6px; border-radius: 8px;
-        color: #64748b; background: transparent;
-        border: 1px solid transparent;
-        transition: all 0.2s ease;
-        display: flex;
-    }
-    .action-btn-edit:hover {
-        color: #818cf8;
-        background: rgba(99,102,241,0.1);
-        border-color: rgba(99,102,241,0.3);
-        box-shadow: 0 0 10px rgba(99,102,241,0.15);
-    }
-    .action-btn-delete {
-        padding: 6px; border-radius: 8px;
-        color: #64748b; background: transparent;
-        border: 1px solid transparent;
-        transition: all 0.2s ease;
-        display: flex; cursor: pointer;
-    }
-    .action-btn-delete:hover {
-        color: #f87171;
-        background: rgba(239,68,68,0.1);
-        border-color: rgba(239,68,68,0.3);
-        box-shadow: 0 0 10px rgba(239,68,68,0.15);
-    }
+        .action-btn-edit {
+            padding: 6px; border-radius: 8px;
+            color: #fffd71; background: transparent;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            display: flex;
+        }
+        .action-btn-edit:hover {
+            color: #ffac40;
+            background: rgba(99,102,241,0.1);
+            border-color: rgba(99,102,241,0.3);
+            box-shadow: 0 0 10px rgba(99,102,241,0.15);
+        }
+        .action-btn-delete {
+            padding: 6px; border-radius: 8px;
+            color: #ff5740; background: transparent;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            display: flex; cursor: pointer;
+        }
+        .action-btn-delete:hover {
+            color: #fc28a4;
+            background: rgba(239,68,68,0.1);
+            border-color: rgba(239,68,68,0.3);
+            box-shadow: 0 0 10px rgba(239,68,68,0.15);
+        }
 
     /* ── Status Badge ── */
     .badge-aktif {
@@ -285,8 +285,8 @@
         display: inline-flex;
         animation: ticker 30s linear infinite;
     }
-    .animate-ticker:hover { 
-        animation-play-state: paused; 
+    .animate-ticker:hover {
+        animation-play-state: paused;
     }
     .header-navigation {
         display: flex;
@@ -295,35 +295,35 @@
         margin-bottom: 24px;
     }
     .back-link {
-        display: flex; 
-        align-items: center; 
+        display: flex;
+        align-items: center;
         justify-content: center;
         transition: opacity 0.2s ease-in-out;
     }
-    .back-link:hover { 
-        opacity: 0.8; 
+    .back-link:hover {
+        opacity: 0.8;
     }
-    .back-link svg { 
-        width: 20px; 
-        height: 20px; 
-        fill: #f8fafc; 
-    }    
+    .back-link svg {
+        width: 20px;
+        height: 20px;
+        fill: #f8fafc;
+    }
     .breadcrumb {
-        display: flex; 
-        align-items: center; 
+        display: flex;
+        align-items: center;
         gap: 16px;
-        font-size: 1.25rem; 
+        font-size: 1.25rem;
         font-weight: 500;
     }
     .breadcrumb a {
-        color: #9ca3af; 
+        color: #9ca3af;
         text-decoration: none;
         transition: color 0.2s ease-in-out;
         font-size: 16px;
     }
-    .breadcrumb svg { 
-        width: 20px; 
-        height: 20px; 
+    .breadcrumb svg {
+        width: 20px;
+        height: 20px;
         color: #f8fafc;
     }
     .breadcrumb p {
@@ -498,51 +498,54 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="w-10">
+                            <th class="w-10 text-center align-middle">
                                 <input type="checkbox" class="rounded border-slate-600 bg-slate-800 text-indigo-500 focus:ring-indigo-500">
                             </th>
-                            <th>NIS</th>
-                            <th>Nama Lengkap</th>
-                            <th>Sub Wilayah</th>
-                            <th>Jenis Kelamin</th>
-                            <th>Nilai</th>
-                            <th>Status</th>
-                            <th></th>
+                            <th class="text-center align-middle">NIS</th>
+                            <th class="text-center align-middle">Nama Lengkap</th>
+                            <th class="text-center align-middle">Sub Wilayah</th>
+                            <th class="text-center align-middle">Jenis Kelamin</th>
+                            <th class="text-center align-middle">Nilai</th>
+                            <th class="text-center align-middle">Status</th>
+                            <th class="text-center align-middle"></th>
                         </tr>
                     </thead>
                     <tbody>
                     @forelse ($siswa as $data)
                         <tr>
-                            <td>
+                            <td class="text-center align-middle">
                                 <input type="checkbox" class="rounded border-slate-600 bg-slate-800 text-indigo-500">
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <span class="font-mono text-indigo-400 text-xs">{{ $data->nomor_induk }}</span>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
+                                <!-- Tambahkan justify-center di sini -->
                                 <div class="flex items-center gap-3">
                                     <img src="{{ $data->avatar_url }}" alt="Avatar {{ $data->nama }}" class="siswa-avatar">
                                     <span class="text-white font-medium">{{ $data->nama }}</span>
                                 </div>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 @if($data->subWilayah)
-                                    <div class="flex flex-col">
+                                    <!-- Tambahkan items-center di sini -->
+                                    <div class="flex flex-col items-center">
                                         <span class="font-medium text-indigo-400 text-xs">{{ $data->subWilayah->nama_sub_wilayah }}</span>
                                         @if($data->subWilayah->wilayah)
                                         <span class="text-xs text-slate-500 mt-0.5">{{ $data->subWilayah->wilayah->nama_wilayah }}</span>
                                         @endif
                                     </div>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                    <span class="inline-flex items-center justify-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                         Belum Ada Kelas
                                     </span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 @if ($data->jenis_kelamin == 'L')
-                                    <div class="flex items-center gap-2 text-blue-400">
+                                    <!-- Tambahkan justify-center di sini -->
+                                    <div class="flex items-center justify-center gap-2 text-blue-400">
                                         <div class="w-6 h-6 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
                                             <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                                 <circle cx="10" cy="14" r="5"/><line x1="13.5" y1="10.5" x2="21" y2="3"/><polyline points="16 3 21 3 21 8"/>
@@ -550,8 +553,9 @@
                                         </div>
                                         <span class="text-xs font-medium">Laki-laki</span>
                                     </div>
-                                @else
-                                    <div class="flex items-center gap-2 text-pink-400">
+                                @elseif ($data->jenis_kelamin == 'P')
+                                    <!-- Tambahkan justify-center di sini -->
+                                    <div class="flex items-center justify-center gap-2 text-pink-400">
                                         <div class="w-6 h-6 rounded-full bg-pink-500/10 border border-pink-500/20 flex items-center justify-center">
                                             <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                                 <circle cx="12" cy="10" r="5"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="9" y1="19" x2="15" y2="19"/>
@@ -559,12 +563,17 @@
                                         </div>
                                         <span class="text-xs font-medium">Perempuan</span>
                                     </div>
+                                @else
+                                    <!-- Tambahkan justify-center di sini -->
+                                    <div class="flex items-center justify-center gap-2 text-white-400">
+                                        <span class="text-xs font-medium">Belum Terisi</span>
+                                    </div>
                                 @endif
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <span class="font-mono text-slate-400 text-xs">0</span>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 @if ($data->status == 'aktif')
                                     <span class="badge-aktif">
                                         <span class="badge-aktif-dot"></span> Aktif
@@ -575,8 +584,8 @@
                                     </span>
                                 @endif
                             </td>
-                            <td>
-                                <div class="flex items-center justify-end gap-2">
+                            <td class="text-center align-middle">
+                                <div class="flex items-center justify-center gap-2">
                                     <a href="{{ route('superadmin.siswa.edit', $data->id) }}"
                                        class="action-btn-edit" title="Edit">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

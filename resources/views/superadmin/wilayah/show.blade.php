@@ -256,8 +256,8 @@
         to   { opacity: 1; transform: translateY(0) scale(1); }
     }
     .animate-fade-in-up { animation: fadeInUp 0.2s ease forwards; }
-    .animate-ticker:hover { 
-        animation-play-state: paused; 
+    .animate-ticker:hover {
+        animation-play-state: paused;
     }
     .header-navigation {
         display: flex;
@@ -266,35 +266,35 @@
         margin-bottom: 24px;
     }
     .back-link {
-        display: flex; 
-        align-items: center; 
+        display: flex;
+        align-items: center;
         justify-content: center;
         transition: opacity 0.2s ease-in-out;
     }
-    .back-link:hover { 
-        opacity: 0.8; 
+    .back-link:hover {
+        opacity: 0.8;
     }
-    .back-link svg { 
-        width: 20px; 
-        height: 20px; 
-        fill: #f8fafc; 
-    }    
+    .back-link svg {
+        width: 20px;
+        height: 20px;
+        fill: #f8fafc;
+    }
     .breadcrumb {
-        display: flex; 
-        align-items: center; 
+        display: flex;
+        align-items: center;
         gap: 16px;
-        font-size: 1.25rem; 
+        font-size: 1.25rem;
         font-weight: 500;
     }
     .breadcrumb a {
-        color: #9ca3af; 
+        color: #9ca3af;
         text-decoration: none;
         transition: color 0.2s ease-in-out;
         font-size: 16px;
     }
-    .breadcrumb svg { 
-        width: 20px; 
-        height: 20px; 
+    .breadcrumb svg {
+        width: 20px;
+        height: 20px;
         color: #f8fafc;
     }
     .breadcrumb span {
