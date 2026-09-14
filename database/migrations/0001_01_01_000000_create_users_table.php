@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('jenis_kelamin', ['L', 'P'])->nullable();
             $table->enum('status', ['aktif', 'tidak_aktif'])->default('aktif');
             $table->foreignId('sub_wilayah_id')->nullable();
-            $table->enum('role', ['siswa', 'guru', 'superadmin'])->default('siswa');
+            $table->enum('role', ['siswa', 'guru', 'super_admin'])->default('siswa');
             $table->rememberToken();
             $table->timestamps();
         });

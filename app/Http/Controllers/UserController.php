@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Exports\SiswaTemplateExport;
+use App\Imports\SiswaImport;
+use App\Exports\GuruTemplateExport;
+use App\Imports\GuruImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 class UserController extends Controller
@@ -13,7 +19,8 @@ class UserController extends Controller
         $totalSiswa = User::where('role', 'siswa')->count();
         $siswaAktif = User::where('role', 'siswa')->where('status', 'aktif')->count();
         $siswaTidakAktif = User::where('role', 'siswa')->where('status', 'tidak_aktif')->count();
-
+        $logs = Cache::get('system_activity_logs', []);
+        // dd($subWilayah);
         $siswaBaru = User::where('role', 'siswa')
                          ->whereMonth('created_at', Carbon::now()->month)
                          ->whereYear('created_at', Carbon::now()->year)
@@ -34,6 +41,7 @@ class UserController extends Controller
         })
 
         ->latest()
+        ->with('subWilayah.wilayah')
         ->paginate(10)
         ->withQueryString();
         return view('superadmin.siswa.index', compact(
@@ -41,7 +49,8 @@ class UserController extends Controller
             'totalSiswa',
             'siswaAktif',
             'siswaTidakAktif',
-            'siswaBaru'
+            'siswaBaru',
+            'logs'
         ));
     }
 
@@ -72,6 +81,15 @@ class UserController extends Controller
             'jenis_kelamin' => $request->jenis_kelamin,
             'status'        => $request->status,
         ]);
+
+        $recentLogs = Cache::get('system_activity_logs', []);
+        array_unshift($recentLogs, [
+            'waktu' => now()->format('H:i:s'),
+            'tipe_aksi' => 'SUCCESS',
+            'deskripsi' => 'Super Admin menambahkan siswa baru.'
+        ]);
+        $recentLogs = array_slice($recentLogs, 0, 5);
+        Cache::forever('system_activity_logs', $recentLogs);
 
         return redirect()->route('superadmin.siswa')
                          ->with('success', 'Data siswa berhasil ditambahkan!');
@@ -108,6 +126,14 @@ class UserController extends Controller
         }
 
         $siswa->update($dataToUpdate);
+        $recentLogs = Cache::get('system_activity_logs', []);
+        array_unshift($recentLogs, [
+            'waktu' => now()->format('H:i:s'),
+            'tipe_aksi' => 'UPDATE',
+            'deskripsi' => "Super Admin memperbarui data siswa dengan ID [$id]."
+        ]);
+        $recentLogs = array_slice($recentLogs, 0, 5);
+        Cache::forever('system_activity_logs', $recentLogs);
         return redirect()->route('superadmin.siswa')
                          ->with('success', 'Data siswa berhasil diperbarui!');
     }
@@ -116,8 +142,43 @@ class UserController extends Controller
     {
         $siswa = User::findOrFail($id);
         $siswa->delete();
+        $recentLogs = Cache::get('system_activity_logs', []);
+        array_unshift($recentLogs, [
+            'waktu' => now()->format('H:i:s'),
+            'tipe_aksi' => 'DELETE',
+            'deskripsi' => "Super Admin menghapus data siswa dengan ID [$id]."
+        ]);
+        $recentLogs = array_slice($recentLogs, 0, 5);
+        Cache::forever('system_activity_logs', $recentLogs);
         return redirect()->route('superadmin.siswa')
                          ->with('success', 'Data siswa berhasil dihapus secara permanen.');
+    }
+
+    public function downloadTemplateSiswa()
+    {
+        // Mengunduh file excel dengan nama 'Template_Import_Siswa.xlsx'
+        return Excel::download(new SiswaTemplateExport, 'Template_Import_Siswa.xlsx');
+    }
+
+    public function importSiswa(Request $request)
+    {
+        // Validasi: Pastikan ada file yang diupload dan formatnya benar
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:5120', // Maksimal 5MB
+        ], [
+            'file_excel.required' => 'Silakan pilih file Excel terlebih dahulu.',
+            'file_excel.mimes' => 'Format file harus berupa .xlsx, .xls, atau .csv.',
+        ]);
+
+        try {
+            // Jalankan proses import
+            Excel::import(new SiswaImport, $request->file('file_excel'));
+
+            return redirect()->route('superadmin.siswa')->with('success', 'Data siswa dari Excel berhasil diimpor!');
+        } catch (\Exception $e) {
+            // Tangkap error jika format Excel tidak sesuai
+            return redirect()->route('superadmin.siswa')->with('error', 'Gagal mengimpor data. Pastikan format kolom sesuai dengan template. Error: ' . $e->getMessage());
+        }
     }
 
     public function indexGuru(Request $request)
@@ -125,7 +186,7 @@ class UserController extends Controller
         $totalGuru = User::where('role', 'guru')->count();
         $guruAktif = User::where('role', 'guru')->where('status', 'aktif')->count();
         $guruTidakAktif = User::where('role', 'guru')->where('status', 'tidak_aktif')->count();
-
+        $logs = Cache::get('guru_activity_logs', []);
         $guruBaru = User::where('role', 'guru')
                          ->whereMonth('created_at', Carbon::now()->month)
                          ->whereYear('created_at', Carbon::now()->year)
@@ -146,6 +207,7 @@ class UserController extends Controller
         })
 
         ->latest()
+        ->withCount('subWilayahs')
         ->paginate(10)
         ->withQueryString();
         return view('superadmin.guru.index', compact(
@@ -153,7 +215,8 @@ class UserController extends Controller
             'totalGuru',
             'guruAktif',
             'guruTidakAktif',
-            'guruBaru'
+            'guruBaru',
+            'logs'
         ));
     }
     public function createGuru()
@@ -183,6 +246,14 @@ class UserController extends Controller
             'jenis_kelamin' => $request->jenis_kelamin,
             'status'        => $request->status,
         ]);
+        $recentLogs = Cache::get('guru_activity_logs', []);
+        array_unshift($recentLogs, [
+            'waktu' => now()->format('H:i:s'),
+            'tipe_aksi' => 'SUCCESS',
+            'deskripsi' => 'Super Admin menambahkan guru baru.'
+        ]);
+        $recentLogs = array_slice($recentLogs, 0, 5);
+        Cache::forever('guru_activity_logs', $recentLogs);
 
         return redirect()->route('superadmin.guru')
                          ->with('success', 'Data guru berhasil ditambahkan!');
@@ -219,6 +290,15 @@ class UserController extends Controller
         }
 
         $guru->update($dataToUpdate);
+        $recentLogs = Cache::get('guru_activity_logs', []);
+        array_unshift($recentLogs, [
+            'waktu' => now()->format('H:i:s'),
+            'tipe_aksi' => 'UPDATE',
+            'deskripsi' => "Super Admin memperbarui data guru dengan ID [$id]."
+        ]);
+        $recentLogs = array_slice($recentLogs, 0, 5);
+        Cache::forever('guru_activity_logs', $recentLogs);
+
         return redirect()->route('superadmin.guru')
                          ->with('success', 'Data guru berhasil diperbarui!');
     }
@@ -227,7 +307,44 @@ class UserController extends Controller
     {
         $guru = User::findOrFail($id);
         $guru->delete();
+        $recentLogs = Cache::get('guru_activity_logs', []);
+        array_unshift($recentLogs, [
+            'waktu' => now()->format('H:i:s'),
+            'tipe_aksi' => 'DELETE',
+            'deskripsi' => "Super Admin menghapus data guru dengan ID [$id]."
+        ]);
+        $recentLogs = array_slice($recentLogs, 0, 5);
+        Cache::forever('guru_activity_logs', $recentLogs);
+
         return redirect()->route('superadmin.guru')
                          ->with('success', 'Data guru berhasil dihapus secara permanen.');
     }
+
+    public function downloadTemplateGuru()
+    {
+        // Mengunduh file excel dengan nama 'Template_Import_Guru.xlsx'
+        return Excel::download(new GuruTemplateExport, 'Template_Import_Guru.xlsx');
+    }
+
+    public function importGuru(Request $request)
+    {
+        // Validasi: Pastikan ada file yang diupload dan formatnya benar
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:5120', // Maksimal 5MB
+        ], [
+            'file_excel.required' => 'Silakan pilih file Excel terlebih dahulu.',
+            'file_excel.mimes' => 'Format file harus berupa .xlsx, .xls, atau .csv.',
+        ]);
+
+        try {
+            // Jalankan proses import
+            Excel::import(new GuruImport, $request->file('file_excel'));
+
+            return redirect()->route('superadmin.guru')->with('success', 'Data guru dari Excel berhasil diimpor!');
+        } catch (\Exception $e) {
+            // Tangkap error jika format Excel tidak sesuai
+            return redirect()->route('superadmin.guru')->with('error', 'Gagal mengimpor data. Pastikan format kolom sesuai dengan template. Error: ' . $e->getMessage());
+        }
+    }
+
 }

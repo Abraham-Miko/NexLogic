@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Menampilkan halaman edit profil.
+     * (Asumsi kamu sudah punya method ini untuk merender edit.blade.php)
      */
-    public function edit(Request $request): View
+    public function edit(Request $request)
     {
         return view('profile.edit', [
             'user' => $request->user(),
@@ -22,39 +19,33 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Memproses update informasi profil user.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        // 1. Validasi input dari form
+        $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            // Validasi jenis_kelamin menyesuaikan dengan enum di migration ('L', 'P')
+            'jenis_kelamin' => ['nullable', 'in:L,P'],
+        ], [
+            // Kustomisasi pesan error (opsional)
+            'nama.required' => 'Nama lengkap wajib diisi.',
+            'jenis_kelamin.in' => 'Pilihan jenis kelamin tidak valid.'
         ]);
 
+        // 2. Ambil data user yang sedang login
         $user = $request->user();
 
-        Auth::logout();
+        // 3. Update field yang diizinkan (nomor_induk diabaikan karena disabled di form)
+        $user->nama = $request->nama;
+        $user->jenis_kelamin = $request->jenis_kelamin;
 
-        $user->delete();
+        // 4. Simpan ke database
+        $user->save();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        // 5. Redirect kembali ke halaman sebelumnya dengan membawa session 'status'
+        // Ini akan men-trigger notifikasi flash-success "Profil berhasil diperbarui" di view-mu
+        return Redirect::back()->with('status', 'profile-updated');
     }
 }
